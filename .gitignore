@@ -1,3 +1,7 @@
 /.idea/
 /calories_app.iml
 /mds/
+/patches/
+/src/main/java/com/github/ko4evneg/caloriesApp/util/Corrector.java
+/target/
+/out/
