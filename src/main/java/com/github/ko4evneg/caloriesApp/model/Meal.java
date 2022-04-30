@@ -1,0 +1,30 @@
+package com.github.ko4evneg.caloriesApp.model;
+
+import java.time.LocalDateTime;
+
+public class Meal {
+    private final LocalDateTime dateTime;
+
+    private final String description;
+
+    private final int calories;
+
+    //TODO: migrate to lombok
+    public Meal(LocalDateTime dateTime, String description, int calories) {
+        this.dateTime = dateTime;
+        this.description = description;
+        this.calories = calories;
+    }
+
+    public LocalDateTime getDateTime() {
+        return dateTime;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public int getCalories() {
+        return calories;
+    }
+}
