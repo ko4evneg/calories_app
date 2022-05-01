@@ -22,11 +22,11 @@ public class MealsUtil {
                 new Meal(LocalDateTime.of(2022, Month.APRIL, 30, 20, 0), "Supper", 410)
         );
 
-        List<Object> mealsTo = filteredByStreams(meals, LocalTime.of(9, 0), LocalTime.of(14, 0), 2000);
+        List<MealTo> mealsTo = filteredByStreams(meals, LocalTime.of(9, 0), LocalTime.of(14, 0), 2000);
         mealsTo.forEach(System.out::println);
     }
 
-    public static List<Object> filteredByStreams(List<Meal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
+    public static List<MealTo> filteredByStreams(List<Meal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
         Map<LocalDate, Integer> dailyCalories = meals.stream()
                 .collect(Collectors.groupingBy(Meal::getDate, Collectors.summingInt(Meal::getCalories)));
 
@@ -36,6 +36,7 @@ public class MealsUtil {
                 .collect(Collectors.toList());
     }
 
+    //TODO: add mapper
     private static MealTo mapFromMeal(Meal meal, boolean excess) {
         return new MealTo(meal.getDateTime(), meal.getDescription(), meal.getCalories(), excess);
     }
