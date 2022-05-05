@@ -33,6 +33,12 @@
             <td><span style="${color}">${meal.calories}</span></td>
             <fmt:parseDate value="${meal.dateTime}" pattern="yyyy-MM-dd'T'HH:mm" var="date"/>
             <td><span style="${color}"><fmt:formatDate pattern="yyyy-MM-dd HH:mm" value="${date}"/></span></td>
+            <td>
+                <form action="meal" method="get">
+                    <input type="hidden" name="id" value="${meal.id}">
+                    <input type="submit" value="Edit">
+                </form>
+            </td>
         </tr>
     </c:forEach>
 </table>
