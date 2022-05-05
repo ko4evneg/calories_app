@@ -12,7 +12,7 @@ public class UserServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        request.getRequestDispatcher("users.jsp").forward(request, response);
+        request.getRequestDispatcher("WEB-INF/view/users.jsp").forward(request, response);
 
         log.info("redirect: users.jsp");
     }
