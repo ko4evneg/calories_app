@@ -27,6 +27,7 @@
     <servlet-mapping>
         <servlet-name>MealServlet</servlet-name>
         <url-pattern>/meals</url-pattern>
+        <url-pattern>/meal</url-pattern>
     </servlet-mapping>
 
     <session-config>

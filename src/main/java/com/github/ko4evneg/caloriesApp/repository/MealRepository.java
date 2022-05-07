@@ -1,16 +1,16 @@
-package com.github.ko4evneg.caloriesApp.service;
+package com.github.ko4evneg.caloriesApp.repository;
 
 import com.github.ko4evneg.caloriesApp.model.Meal;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface MealService {
+public interface MealRepository {
     List<Meal> getAll();
 
-    Optional<Meal> get(Integer mealId);
+    Optional<Meal> get(Integer id);
 
     void save(Meal meal);
 
-    void delete(Integer mealId);
+    void delete(Integer id);
 }
