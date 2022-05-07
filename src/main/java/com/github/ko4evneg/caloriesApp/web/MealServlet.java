@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 import java.util.Optional;
 
 import static com.github.ko4evneg.caloriesApp.util.MealsUtil.mapFromMeal;
@@ -22,6 +23,37 @@ public class MealServlet extends HttpServlet {
     private static final Logger log = LoggerFactory.getLogger(MealServlet.class);
 
     private final MealService mealService = new MealServiceImpl();
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        request.setCharacterEncoding("UTF-8");
+        String action = request.getParameter("action").toLowerCase();
+        String mealId = Objects.requireNonNull(request.getParameter("id"));
+
+        switch (action) {
+            case "delete" -> {
+                log.debug("Delete meal {}", mealId);
+                mealService.delete(Integer.parseInt(mealId));
+            }
+            case "save" -> {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+                LocalDateTime datetime = LocalDateTime.parse(request.getParameter("datetime"), formatter);
+                String description = request.getParameter("description");
+                int calories = Integer.parseInt(request.getParameter("calories"));
+
+                Meal meal = new Meal(
+                        (mealId.isBlank() ? null : Integer.parseInt(mealId))
+                        , datetime
+                        , description
+                        , calories);
+
+                log.debug(meal.isNew() ? "Save new {}" : "Edit meal {}", meal);
+                mealService.save(meal);
+            }
+        }
+
+        response.sendRedirect("meals");
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -48,27 +80,5 @@ public class MealServlet extends HttpServlet {
                 request.getRequestDispatcher("WEB-INF/view/mealSave.jsp").forward(request, response);
             }
         }
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String action = request.getParameter("action").toLowerCase();
-        String mealId = request.getParameter("id");
-
-        switch (action) {
-            case "delete" -> mealService.delete(Integer.parseInt(mealId));
-            case "save" -> {
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
-                LocalDateTime datetime = LocalDateTime.parse(request.getParameter("datetime"), formatter);
-                String description = request.getParameter("description");
-                int calories = Integer.parseInt(request.getParameter("calories"));
-                Meal meal = (mealId == null || mealId.isBlank()) ?
-                        new Meal(datetime, description, calories) :
-                        new Meal(Integer.parseInt(mealId), datetime, description, calories);
-                mealService.save(meal);
-            }
-        }
-
-        response.sendRedirect("meals");
     }
 }
