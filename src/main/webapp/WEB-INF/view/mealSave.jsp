@@ -10,7 +10,9 @@
 <hr>
 <h2>Meal save</h2>
 <form method="post">
-    <jsp:useBean id="meal" scope="request" type="com.github.ko4evneg.caloriesApp.model.MealTo" class="com.github.ko4evneg.caloriesApp.model.MealTo"/>
+    <c:if test="${meal != null}">
+        <jsp:useBean id="meal" scope="request" type="com.github.ko4evneg.caloriesApp.model.MealTo"/>
+    </c:if>
     <table>
         <tr>
             <td>

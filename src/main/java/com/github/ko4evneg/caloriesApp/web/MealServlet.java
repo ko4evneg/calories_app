@@ -2,6 +2,7 @@ package com.github.ko4evneg.caloriesApp.web;
 
 import com.github.ko4evneg.caloriesApp.model.Meal;
 import com.github.ko4evneg.caloriesApp.service.MealService;
+import com.github.ko4evneg.caloriesApp.service.MealServiceImpl;
 import com.github.ko4evneg.caloriesApp.util.MealsUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +20,6 @@ import static com.github.ko4evneg.caloriesApp.util.MealsUtil.mapFromMeal;
 
 public class MealServlet extends HttpServlet {
     private static final Logger log = LoggerFactory.getLogger(MealServlet.class);
-    private static final int CALORIES_LIMIT = 2000;
 
     private final MealService mealService = new MealServiceImpl();
 
@@ -27,14 +27,14 @@ public class MealServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         if (request.getServletPath().equals("/meals")) {
             log.debug("getAll");
-            request.setAttribute("meals", MealsUtil.getTos(MealsUtil.meals, MealsUtil.DEFAULT_CALORIES_PER_DAY));
+            request.setAttribute("meals", MealsUtil.getTos(mealService.getAll(), MealsUtil.DEFAULT_CALORIES_PER_DAY));
             request.getRequestDispatcher("WEB-INF/view/meals.jsp").forward(request, response);
         }
 
         if (request.getServletPath().equals("/meal")) {
             String mealId = request.getParameter("id");
             if (mealId == null) {
-                log.info("New meal creation");
+                log.debug("New meal creation");
                 request.getRequestDispatcher("WEB-INF/view/mealSave.jsp").forward(request, response);
                 return;
             }

@@ -31,6 +31,7 @@ public class MealServiceImpl implements MealService {
         mealRepository.delete(mealId);
     }
 
+    //TODO: move to tests
     public static void main(String[] args) {
         MealService mealService = new MealServiceImpl();
 

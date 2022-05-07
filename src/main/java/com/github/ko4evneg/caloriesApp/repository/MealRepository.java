@@ -10,7 +10,7 @@ public interface MealRepository {
 
     Optional<Meal> get(Integer id);
 
-    void save(Meal meal);
+    Meal save(Meal meal);
 
     void delete(Integer id);
 }

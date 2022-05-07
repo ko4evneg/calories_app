@@ -3,10 +3,8 @@ package com.github.ko4evneg.caloriesApp.model;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class Meal {
-    private static AtomicInteger idCounter = new AtomicInteger(1);
     //TODO migrate to Integer
     private Integer id;
 
@@ -25,13 +23,7 @@ public class Meal {
     }
 
     public Meal(LocalDateTime dateTime, String description, int calories) {
-        this.id = idCounter.getAndIncrement();
-        this.dateTime = dateTime;
-        this.description = description;
-        this.calories = calories;
-    }
-
-    public Meal() {
+        this(null, dateTime, description, calories);
     }
 
     public Integer getId() {
@@ -72,10 +64,6 @@ public class Meal {
 
     public LocalTime getTime() {
         return dateTime.toLocalTime();
-    }
-
-    public static Integer getNewId(){
-        return idCounter.getAndIncrement();
     }
 
     @Override
