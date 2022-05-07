@@ -8,9 +8,9 @@ import java.util.Optional;
 public interface MealRepository {
     List<Meal> getAll();
 
-    Optional<Meal> get(int id);
+    Optional<Meal> get(Integer id);
 
     void save(Meal meal);
 
-    void delete(int id);
+    void delete(Integer id);
 }
