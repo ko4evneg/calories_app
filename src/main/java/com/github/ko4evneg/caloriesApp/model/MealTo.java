@@ -9,7 +9,7 @@ public class MealTo {
 
     private String description;
 
-    private Integer calories;
+    private int calories;
 
     private boolean excess;
 
@@ -72,7 +72,8 @@ public class MealTo {
     @Override
     public String toString() {
         return "MealTo{" +
-                "dateTime=" + dateTime +
+                "id=" + id +
+                ", dateTime=" + dateTime +
                 ", description='" + description + '\'' +
                 ", calories=" + calories +
                 ", excess=" + excess +

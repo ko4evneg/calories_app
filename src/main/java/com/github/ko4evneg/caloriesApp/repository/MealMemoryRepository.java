@@ -40,14 +40,13 @@ public class MealMemoryRepository implements MealRepository {
 
     @Override
     public Meal save(Meal meal) {
-        if (meal.getId() == null) {
+        if (meal.isNew()) {
             int newId = idCounter.getAndIncrement();
             meal.setId(newId);
             meals.put(newId, meal);
-        } else {
-            meals.put(meal.getId(), meal);
+            return get(meal.getId()).get();
         }
-        return get(meal.getId()).get();
+            return meals.computeIfPresent(meal.getId(), (id, oldMeal) -> meal);
     }
 
     @Override
