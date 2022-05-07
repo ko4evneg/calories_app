@@ -9,8 +9,8 @@
 <h3><a href="../../index.html">Home</a></h3>
 <hr>
 <h2>Meal save</h2>
-<form method="post" action="meal/save">
-    <jsp:useBean id="meal" scope="request" type="com.github.ko4evneg.caloriesApp.model.Meal"/>
+<form method="post">
+    <jsp:useBean id="meal" scope="request" type="com.github.ko4evneg.caloriesApp.model.MealTo" class="com.github.ko4evneg.caloriesApp.model.MealTo"/>
     <table>
         <tr>
             <td>
@@ -30,17 +30,16 @@
         </tr>
         <tr>
             <td>
-                <label for="date">Date, </label>
-                <label for="time">Time:</label>
+                <label for="datetime">Date: </label>
             </td>
             <td>
-                <input id="date" type="date" name="date" value="${meal.dateTime.toLocalDate()}"/>
-                <input id="time" type="time" name="time" value="${meal.dateTime.toLocalTime()}"/>
+                <input id="datetime" type="datetime-local" name="datetime" value="${meal.dateTime}"/>
             </td>
         </tr>
     </table>
     <br>
-    <input type="submit" value="Save">
+    <input type="hidden" name="id" value="${meal.id}"/>
+    <input type="submit" name="action" value="Save">
 </form>
 </body>
 </html>

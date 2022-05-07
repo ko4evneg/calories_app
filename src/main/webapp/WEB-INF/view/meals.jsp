@@ -39,8 +39,18 @@
                     <input type="submit" value="Edit">
                 </form>
             </td>
+            <td>
+                <form action="meal" method="post">
+                    <input type="hidden" name="id" value="${meal.id}">
+                    <input type="submit" name="action" value="Delete">
+                </form>
+            </td>
         </tr>
     </c:forEach>
 </table>
+<br>
+<form action="meal" method="get">
+    <input type="submit" value="Add...">
+</form>
 </body>
 </html>
