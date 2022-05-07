@@ -43,5 +43,6 @@
     <input type="hidden" name="id" value="${meal.id}"/>
     <input type="submit" name="action" value="Save">
 </form>
+<button onclick="window.location.href = 'meals'">Cancel</button>
 </body>
 </html>
