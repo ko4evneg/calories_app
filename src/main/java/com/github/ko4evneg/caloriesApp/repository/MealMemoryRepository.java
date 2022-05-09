@@ -50,8 +50,8 @@ public class MealMemoryRepository implements MealRepository {
     }
 
     @Override
-    public void delete(Integer id) {
-        meals.remove(id);
+    public boolean delete(Integer id) {
+        return meals.remove(id) != null;
     }
 
     //TODO: move to tests
