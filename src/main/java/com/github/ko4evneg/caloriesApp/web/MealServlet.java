@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
-import java.util.Optional;
 
 import static com.github.ko4evneg.caloriesApp.util.MealsUtil.mapFromMeal;
 

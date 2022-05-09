@@ -1,7 +1,7 @@
 package com.github.ko4evneg.caloriesApp.service;
 
 import com.github.ko4evneg.caloriesApp.model.Meal;
-import com.github.ko4evneg.caloriesApp.repository.MealMemoryRepository;
+import com.github.ko4evneg.caloriesApp.repository.inmemory.InMemoryMealRepository;
 import com.github.ko4evneg.caloriesApp.repository.MealRepository;
 import com.github.ko4evneg.caloriesApp.util.exception.NotFoundException;
 
@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class MealServiceImpl implements MealService {
-    private final MealRepository mealRepository = new MealMemoryRepository();
+    private final MealRepository mealRepository = new InMemoryMealRepository();
 
     @Override
     public List<Meal> getAll() {

@@ -1,6 +1,7 @@
-package com.github.ko4evneg.caloriesApp.repository;
+package com.github.ko4evneg.caloriesApp.repository.inmemory;
 
 import com.github.ko4evneg.caloriesApp.model.Meal;
+import com.github.ko4evneg.caloriesApp.repository.MealRepository;
 
 import java.time.LocalDateTime;
 import java.time.Month;
@@ -10,11 +11,11 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class MealMemoryRepository implements MealRepository {
+public class InMemoryMealRepository implements MealRepository {
     private final AtomicInteger idCounter = new AtomicInteger(1);
     private final Map<Integer, Meal> meals;
 
-    public MealMemoryRepository() {
+    public InMemoryMealRepository() {
         meals = new ConcurrentHashMap<>();
 
         synchronized (idCounter) {
@@ -56,7 +57,7 @@ public class MealMemoryRepository implements MealRepository {
 
     //TODO: move to tests
     public static void main(String[] args) {
-        MealRepository mealRepository = new MealMemoryRepository();
+        MealRepository mealRepository = new InMemoryMealRepository();
 
         System.out.println(mealRepository.getAll());
 
