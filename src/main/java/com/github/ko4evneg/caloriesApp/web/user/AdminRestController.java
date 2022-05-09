@@ -1,9 +1,11 @@
 package com.github.ko4evneg.caloriesApp.web.user;
 
+import org.springframework.stereotype.Controller;
 import com.github.ko4evneg.caloriesApp.model.User;
 
 import java.util.List;
 
+@Controller
 public class AdminRestController extends AbstractUserController {
 
     @Override

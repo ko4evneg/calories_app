@@ -2,6 +2,7 @@ package com.github.ko4evneg.caloriesApp.repository.inmemory;
 
 import com.github.ko4evneg.caloriesApp.model.Meal;
 import com.github.ko4evneg.caloriesApp.repository.MealRepository;
+import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.time.Month;
@@ -11,6 +12,7 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
+@Repository
 public class InMemoryMealRepository implements MealRepository {
     private final AtomicInteger idCounter = new AtomicInteger(1);
     private final Map<Integer, Meal> meals;

@@ -5,6 +5,7 @@ import com.github.ko4evneg.caloriesApp.model.User;
 import java.util.List;
 
 public interface UserService {
+
     User get(Integer userId);
 
     User getByEmail(String email);

@@ -1,16 +1,20 @@
 package com.github.ko4evneg.caloriesApp.service;
 
 import com.github.ko4evneg.caloriesApp.model.Meal;
-import com.github.ko4evneg.caloriesApp.repository.inmemory.InMemoryMealRepository;
 import com.github.ko4evneg.caloriesApp.repository.MealRepository;
 import com.github.ko4evneg.caloriesApp.util.exception.NotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class MealServiceImpl implements MealService {
-    private final MealRepository mealRepository = new InMemoryMealRepository();
+
+    @Autowired
+    private MealRepository mealRepository;
 
     @Override
     public List<Meal> getAll() {
