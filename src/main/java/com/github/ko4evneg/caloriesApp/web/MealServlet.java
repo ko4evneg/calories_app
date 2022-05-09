@@ -71,14 +71,8 @@ public class MealServlet extends HttpServlet {
                 return;
             }
 
-            Optional<Meal> mealOptional = mealService.get(Integer.parseInt(mealId));
-            if (mealOptional.isEmpty()) {
-                log.error("Meal id " + mealId + " not exist");
-                response.sendError(HttpServletResponse.SC_NOT_FOUND, "Meal id " + mealId + " was not found.");
-            } else {
-                request.setAttribute("meal", mapFromMeal(mealOptional.get()));
-                request.getRequestDispatcher("WEB-INF/view/mealSave.jsp").forward(request, response);
-            }
+            request.setAttribute("meal", mapFromMeal(mealService.get(Integer.parseInt(mealId))));
+            request.getRequestDispatcher("WEB-INF/view/mealSave.jsp").forward(request, response);
         }
     }
 }
