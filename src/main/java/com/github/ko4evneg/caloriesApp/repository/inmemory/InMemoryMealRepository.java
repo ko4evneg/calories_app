@@ -2,6 +2,8 @@ package com.github.ko4evneg.caloriesApp.repository.inmemory;
 
 import com.github.ko4evneg.caloriesApp.model.Meal;
 import com.github.ko4evneg.caloriesApp.repository.MealRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
@@ -14,6 +16,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 @Repository
 public class InMemoryMealRepository implements MealRepository {
+    private static final Logger log = LoggerFactory.getLogger(InMemoryMealRepository.class);
+
     private final AtomicInteger idCounter = new AtomicInteger(1);
     private final Map<Integer, Meal> meals;
 
@@ -33,27 +37,32 @@ public class InMemoryMealRepository implements MealRepository {
 
     @Override
     public List<Meal> getAll() {
+        log.debug("getAll");
         return meals.values().stream().toList();
     }
 
     @Override
     public Optional<Meal> get(Integer id) {
+        log.debug("get {}", id);
         return Optional.ofNullable(meals.get(id));
     }
 
     @Override
     public Meal save(Meal meal) {
+        log.debug("save {}", meal);
         if (meal.isNew()) {
             int newId = idCounter.getAndIncrement();
             meal.setId(newId);
             meals.put(newId, meal);
-            return get(meal.getId()).get();
+            return get(meal.getId())
+                    .orElseThrow(() -> new RuntimeException("New meal was not saved."));
         }
-            return meals.computeIfPresent(meal.getId(), (id, oldMeal) -> meal);
+        return meals.computeIfPresent(meal.getId(), (id, oldMeal) -> meal);
     }
 
     @Override
     public boolean delete(Integer id) {
+        log.debug("delete {}", id);
         return meals.remove(id) != null;
     }
 
