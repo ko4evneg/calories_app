@@ -6,11 +6,11 @@ import java.util.List;
 import java.util.Optional;
 
 public interface MealRepository {
-    List<Meal> getAll();
+    List<Meal> getAll(Integer userId);
 
-    Optional<Meal> get(Integer id);
+    Optional<Meal> get(Integer id, Integer userId);
 
-    Meal save(Meal meal);
+    Meal save(Meal meal, Integer userId);
 
-    boolean delete(Integer id);
+    boolean delete(Integer id, Integer userId);
 }
