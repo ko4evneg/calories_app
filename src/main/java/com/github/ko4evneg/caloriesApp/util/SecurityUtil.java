@@ -1,4 +1,4 @@
-package com.github.ko4evneg.caloriesApp.web;
+package com.github.ko4evneg.caloriesApp.util;
 
 import static com.github.ko4evneg.caloriesApp.util.MealsUtil.DEFAULT_CALORIES_PER_DAY;
 
