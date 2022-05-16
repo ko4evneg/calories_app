@@ -1,4 +1,4 @@
-package com.github.ko4evneg.caloriesApp.model;
+package com.github.ko4evneg.caloriesApp.to;
 
 import java.time.LocalDateTime;
 

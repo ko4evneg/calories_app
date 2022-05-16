@@ -1,7 +1,7 @@
 package com.github.ko4evneg.caloriesApp.util;
 
 import com.github.ko4evneg.caloriesApp.model.Meal;
-import com.github.ko4evneg.caloriesApp.model.MealTo;
+import com.github.ko4evneg.caloriesApp.to.MealTo;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

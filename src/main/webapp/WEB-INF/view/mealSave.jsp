@@ -11,7 +11,7 @@
 <h2>Meal save</h2>
 <form method="post" action="meal">
     <c:if test="${meal != null}">
-        <jsp:useBean id="meal" scope="request" type="com.github.ko4evneg.caloriesApp.model.MealTo"/>
+        <jsp:useBean id="meal" scope="request" type="com.github.ko4evneg.caloriesApp.to.MealTo"/>
     </c:if>
     <table>
         <tr>
