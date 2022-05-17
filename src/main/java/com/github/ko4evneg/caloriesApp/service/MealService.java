@@ -5,11 +5,11 @@ import com.github.ko4evneg.caloriesApp.model.Meal;
 import java.util.List;
 
 public interface MealService {
-    List<Meal> getAll();
+    List<Meal> getAll(Integer userId);
 
-    Meal get(Integer mealId);
+    Meal get(Integer mealId, Integer userId);
 
-    Meal save(Meal meal);
+    Meal save(Meal meal, Integer userId);
 
-    void delete(Integer mealId);
+    void delete(Integer mealId, Integer userId);
 }

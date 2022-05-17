@@ -3,7 +3,7 @@ package com.github.ko4evneg.caloriesApp.web.user;
 import org.springframework.stereotype.Controller;
 import com.github.ko4evneg.caloriesApp.model.User;
 
-import static com.github.ko4evneg.caloriesApp.web.SecurityUtil.authUserId;
+import static com.github.ko4evneg.caloriesApp.util.SecurityUtil.authUserId;
 
 @Controller
 public class ProfileRestController extends AbstractUserController {

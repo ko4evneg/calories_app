@@ -4,6 +4,7 @@ import com.github.ko4evneg.caloriesApp.model.Meal;
 import com.github.ko4evneg.caloriesApp.service.MealService;
 import com.github.ko4evneg.caloriesApp.service.MealServiceImpl;
 import com.github.ko4evneg.caloriesApp.util.MealsUtil;
+import com.github.ko4evneg.caloriesApp.util.SecurityUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,11 +29,12 @@ public class MealServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         String action = request.getParameter("action").toLowerCase();
         String mealId = Objects.requireNonNull(request.getParameter("id"));
+        Integer userId = SecurityUtil.authUserId();
 
         switch (action) {
             case "delete" -> {
                 log.debug("Delete meal {}", mealId);
-                mealService.delete(Integer.parseInt(mealId));
+                mealService.delete(Integer.parseInt(mealId), userId);
             }
             case "save" -> {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
@@ -44,10 +46,11 @@ public class MealServlet extends HttpServlet {
                         (mealId.isBlank() ? null : Integer.parseInt(mealId))
                         , datetime
                         , description
-                        , calories);
+                        , calories
+                        , userId);
 
                 log.debug(meal.isNew() ? "Save new {}" : "Edit meal {}", meal);
-                mealService.save(meal);
+                mealService.save(meal, userId);
             }
         }
 
@@ -56,9 +59,11 @@ public class MealServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Integer userId = SecurityUtil.authUserId();
+
         if (request.getServletPath().equals("/meals")) {
             log.debug("getAll");
-            request.setAttribute("meals", MealsUtil.getTos(mealService.getAll(), MealsUtil.DEFAULT_CALORIES_PER_DAY));
+            request.setAttribute("meals", MealsUtil.getTos(mealService.getAll(userId), MealsUtil.DEFAULT_CALORIES_PER_DAY));
             request.getRequestDispatcher("WEB-INF/view/meals.jsp").forward(request, response);
         }
 
@@ -70,7 +75,7 @@ public class MealServlet extends HttpServlet {
                 return;
             }
 
-            request.setAttribute("meal", mapFromMeal(mealService.get(Integer.parseInt(mealId))));
+            request.setAttribute("meal", mapFromMeal(mealService.get(Integer.parseInt(mealId), userId)));
             request.getRequestDispatcher("WEB-INF/view/mealSave.jsp").forward(request, response);
         }
     }

@@ -1,4 +1,4 @@
-package com.github.ko4evneg.caloriesApp.model;
+package com.github.ko4evneg.caloriesApp.to;
 
 import java.time.LocalDateTime;
 
@@ -11,19 +11,22 @@ public class MealTo {
 
     private int calories;
 
+    private Integer userId;
+
     private boolean excess;
 
     //TODO: migrate to lombok
-    public MealTo(Integer id, LocalDateTime dateTime, String description, int calories, boolean excess) {
+    public MealTo(Integer id, LocalDateTime dateTime, String description, int calories, boolean excess, Integer userId) {
         this.id = id;
         this.dateTime = dateTime;
         this.description = description;
         this.calories = calories;
         this.excess = excess;
+        this.userId = userId;
     }
 
-    public MealTo(Integer id, LocalDateTime dateTime, String description, int calories) {
-        this(id, dateTime, description, calories, false);
+    public MealTo(Integer id, LocalDateTime dateTime, String description, int calories, Integer userId) {
+        this(id, dateTime, description, calories, false, userId);
     }
 
     public MealTo() {
@@ -57,8 +60,16 @@ public class MealTo {
         return calories;
     }
 
-    public void setCalories(Integer calories) {
+    public void setCalories(int calories) {
         this.calories = calories;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
     public boolean isExcess() {
