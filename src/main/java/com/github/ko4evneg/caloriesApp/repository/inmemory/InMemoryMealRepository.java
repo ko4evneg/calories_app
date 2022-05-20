@@ -8,10 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.time.Month;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -41,7 +38,7 @@ public class InMemoryMealRepository implements MealRepository {
         log.debug("getAll");
         return meals.values().stream()
                 .filter(meal -> Objects.equals(meal.getUserId(), userId))
-                .sorted((left, right) -> right.getDateTime().compareTo(left.getDateTime()))
+                .sorted(Comparator.comparing(Meal::getDateTime).reversed())
                 .toList();
     }
 
@@ -58,7 +55,7 @@ public class InMemoryMealRepository implements MealRepository {
     public Meal save(Meal meal, Integer userId) {
         log.debug("save {}", meal);
         if (meal.isNew()) {
-            if (meal.getUserId() != userId) {
+            if (!meal.getUserId().equals(userId)) {
                 throw new RuntimeException("User id mismatch with current user");
             }
 

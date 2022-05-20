@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import com.github.ko4evneg.caloriesApp.model.User;
 import com.github.ko4evneg.caloriesApp.repository.UserRepository;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -27,7 +28,10 @@ public class InMemoryUserRepository implements UserRepository {
     @Override
     public List<User> getAll() {
         log.debug("getAll");
-        return users.values().stream().toList();
+        return users.values()
+                .stream()
+                .sorted(Comparator.comparing(User::getName).thenComparing(User::getEmail))
+                .toList();
     }
 
     @Override
@@ -39,7 +43,10 @@ public class InMemoryUserRepository implements UserRepository {
     @Override
     public Optional<User> getByEmail(String email) {
         log.debug("getByEmail {}", email);
-        return users.values().stream().filter(user -> user.getEmail().equals(email)).findFirst();
+        return users.values()
+                .stream()
+                .filter(user -> user.getEmail().equals(email))
+                .findFirst();
     }
 
     @Override
