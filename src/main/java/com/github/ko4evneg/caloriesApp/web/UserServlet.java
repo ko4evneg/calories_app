@@ -17,6 +17,7 @@ public class UserServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         log.debug("redirect: users.jsp");
+        //TODO Move to users dto
         request.setAttribute("users", service.getAll());
         request.getRequestDispatcher("WEB-INF/view/users.jsp").forward(request, response);
     }

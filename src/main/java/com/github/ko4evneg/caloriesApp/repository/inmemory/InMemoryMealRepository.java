@@ -3,6 +3,7 @@ package com.github.ko4evneg.caloriesApp.repository.inmemory;
 import com.github.ko4evneg.caloriesApp.model.Meal;
 import com.github.ko4evneg.caloriesApp.repository.MealRepository;
 import com.github.ko4evneg.caloriesApp.util.MealsUtil;
+import com.github.ko4evneg.caloriesApp.util.Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
@@ -13,6 +14,7 @@ import java.time.Month;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Predicate;
 
 import static com.github.ko4evneg.caloriesApp.repository.inmemory.InMemoryUserRepository.ADMIN_ID;
 import static com.github.ko4evneg.caloriesApp.repository.inmemory.InMemoryUserRepository.USER_ID;
@@ -35,8 +37,20 @@ public class InMemoryMealRepository implements MealRepository {
     @Override
     public List<Meal> getAll(Integer userId) {
         log.debug("getAll");
+        return getFiltered(userId, m -> true);
+    }
+
+    @Override
+    public List<Meal> getBetweenHalfOpen(LocalDateTime startDateTime, LocalDateTime endDateTime, Integer userId) {
+        log.debug("getBetweenHalfOpen");
+        return getFiltered(userId, m -> Util.isBetweenHalfOpen(m.getDateTime(), startDateTime, endDateTime));
+    }
+
+    private List<Meal> getFiltered(Integer userId, Predicate<Meal> filter) {
+        log.debug("getAllFiltered");
         return meals.values().stream()
                 .filter(meal -> Objects.equals(meal.getUserId(), userId))
+                .filter(filter)
                 .sorted(Comparator.comparing(Meal::getDateTime).reversed())
                 .toList();
     }
@@ -55,6 +69,7 @@ public class InMemoryMealRepository implements MealRepository {
         log.debug("save {}", meal);
         if (meal.isNew()) {
             if (!meal.getUserId().equals(userId)) {
+                //TODO: remove throw here?
                 throw new RuntimeException("User id mismatch with current user");
             }
 
@@ -80,7 +95,7 @@ public class InMemoryMealRepository implements MealRepository {
 
     //TODO: move to tests
     public static void main(String[] args) {
-      MealRepository mealRepository = new InMemoryMealRepository();
+        MealRepository mealRepository = new InMemoryMealRepository();
  /*
         System.out.println(mealRepository.getAll(1));
 
