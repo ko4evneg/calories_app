@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.Month;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -79,8 +80,8 @@ public class InMemoryMealRepository implements MealRepository {
 
     //TODO: move to tests
     public static void main(String[] args) {
-        MealRepository mealRepository = new InMemoryMealRepository();
-/*
+      MealRepository mealRepository = new InMemoryMealRepository();
+ /*
         System.out.println(mealRepository.getAll(1));
 
         System.out.println(mealRepository.get(5, 1));
@@ -91,7 +92,7 @@ public class InMemoryMealRepository implements MealRepository {
         mealRepository.save(new Meal(LocalDateTime.now(), "desc", 123123, 1), 1);
         System.out.println(mealRepository.get(8, 1));
   */
-        Meal meal = new Meal(LocalDateTime.now(), "desc", 123123, 2);
+ /*       Meal meal = new Meal(LocalDateTime.now(), "desc", 123123, 2);
         Meal dupMeal = new Meal(LocalDateTime.now(), "desc", 123123, 2);
 
         mealRepository.save(meal, 2);
@@ -111,6 +112,9 @@ public class InMemoryMealRepository implements MealRepository {
         System.out.println("Wrong user delete: " + mealRepository.getAll(2));
 
         mealRepository.delete(8, 2);
-        System.out.println("Correct delete: " + mealRepository.getAll(2));
+        System.out.println("Correct delete: " + mealRepository.getAll(2));*/
+
+        Collection<Meal> values = mealRepository.getAll(1);
+        System.out.println(MealsUtil.getFilteredTos(values, 2000, LocalTime.of(10, 0), LocalTime.of(16, 0)));
     }
 }
