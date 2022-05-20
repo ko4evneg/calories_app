@@ -16,6 +16,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 @Repository
 public class InMemoryUserRepository implements UserRepository {
+    public static final int USER_ID = 1;
+    public static final int ADMIN_ID = 2;
+
     private static final Logger log = LoggerFactory.getLogger(InMemoryUserRepository.class);
 
     private final AtomicInteger idCounter = new AtomicInteger(1000001);
@@ -23,6 +26,9 @@ public class InMemoryUserRepository implements UserRepository {
 
     public InMemoryUserRepository() {
         users = new ConcurrentHashMap<>();
+
+        save(new User( "User", "user@mail.ru", "123", Role.USER));
+        save(new User( "User", "user@mail.ru", "123", Role.ADMIN));
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.github.ko4evneg.caloriesApp.repository.inmemory;
 
 import com.github.ko4evneg.caloriesApp.model.Meal;
 import com.github.ko4evneg.caloriesApp.repository.MealRepository;
+import com.github.ko4evneg.caloriesApp.util.MealsUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
@@ -11,6 +12,9 @@ import java.time.Month;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import static com.github.ko4evneg.caloriesApp.repository.inmemory.InMemoryUserRepository.ADMIN_ID;
+import static com.github.ko4evneg.caloriesApp.repository.inmemory.InMemoryUserRepository.USER_ID;
 
 @Repository
 public class InMemoryMealRepository implements MealRepository {
@@ -22,15 +26,9 @@ public class InMemoryMealRepository implements MealRepository {
     public InMemoryMealRepository() {
         meals = new ConcurrentHashMap<>();
 
-        synchronized (idCounter) {
-            save(new Meal(LocalDateTime.of(2022, Month.APRIL, 29, 10, 0), "Breakfast", 500, 1), 1);
-            save(new Meal(LocalDateTime.of(2022, Month.APRIL, 29, 13, 0), "Dinner", 1000, 1), 1);
-            save(new Meal(LocalDateTime.of(2022, Month.APRIL, 29, 20, 0), "Supper", 500, 1), 1);
-            save(new Meal(LocalDateTime.of(2022, Month.APRIL, 30, 0, 0), "Edge case", 100, 1), 1);
-            save(new Meal(LocalDateTime.of(2022, Month.APRIL, 30, 10, 0), "Breakfast", 1000, 1), 1);
-            save(new Meal(LocalDateTime.of(2022, Month.APRIL, 30, 13, 0), "Dinner", 500, 1), 1);
-            save(new Meal(LocalDateTime.of(2022, Month.APRIL, 30, 20, 0), "Supper", 410, 1), 1);
-        }
+        MealsUtil.meals.forEach(m -> save(m, USER_ID));
+        save(new Meal(LocalDateTime.of(2015, Month.JUNE, 1, 14, 0), "Админ ланч", 510, ADMIN_ID), ADMIN_ID);
+        save(new Meal(LocalDateTime.of(2015, Month.JUNE, 1, 21, 0), "Админ ужин", 1500, ADMIN_ID), ADMIN_ID);
     }
 
     @Override
