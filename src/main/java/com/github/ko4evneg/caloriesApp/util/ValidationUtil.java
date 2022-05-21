@@ -2,6 +2,7 @@ package com.github.ko4evneg.caloriesApp.util;
 
 
 import com.github.ko4evneg.caloriesApp.model.AbstractBaseEntity;
+import com.github.ko4evneg.caloriesApp.model.Meal;
 
 public class ValidationUtil {
 
@@ -18,5 +19,9 @@ public class ValidationUtil {
         } else if (entity.getId() != id) {
             throw new IllegalArgumentException(entity + " must be with id=" + id);
         }
+    }
+
+    public static boolean checkUserHasRightsForMeal(Meal meal, Integer userId) {
+        return meal.getUserId().equals(userId);
     }
 }

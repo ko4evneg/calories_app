@@ -13,6 +13,7 @@ import java.util.function.Predicate;
 
 import static com.github.ko4evneg.caloriesApp.repository.inmemory.InMemoryUserRepository.ADMIN_ID;
 import static com.github.ko4evneg.caloriesApp.repository.inmemory.InMemoryUserRepository.USER_ID;
+import static com.github.ko4evneg.caloriesApp.util.ValidationUtil.checkUserHasRightsForMeal;
 
 @Repository
 public class InMemoryMealRepository extends InMemoryBaseRepository<Meal> implements MealRepository {
@@ -40,7 +41,7 @@ public class InMemoryMealRepository extends InMemoryBaseRepository<Meal> impleme
     private List<Meal> getFiltered(Integer userId, Predicate<Meal> filter) {
         log.debug("getAllFiltered");
         return repository.values().stream()
-                .filter(meal -> Objects.equals(meal.getUserId(), userId))
+                .filter(meal -> checkUserHasRightsForMeal(meal, userId))
                 .filter(filter)
                 .sorted(Comparator.comparing(Meal::getDateTime).reversed())
                 .toList();
@@ -50,7 +51,7 @@ public class InMemoryMealRepository extends InMemoryBaseRepository<Meal> impleme
     public Optional<Meal> get(Integer id, Integer userId) {
         log.debug("get {}", id);
         Meal meal = repository.get(id);
-        if (meal != null && Objects.equals(meal.getUserId(), userId))
+        if (meal != null && checkUserHasRightsForMeal(meal, userId))
             return Optional.of(meal);
         return Optional.empty();
     }
@@ -59,11 +60,8 @@ public class InMemoryMealRepository extends InMemoryBaseRepository<Meal> impleme
     public Meal save(Meal meal, Integer userId) {
         if (meal.isNew()) {
             log.debug("save new {}", meal);
-            if (!meal.getUserId().equals(userId)) {
-                //TODO: remove throw here? extract assertion
+            if (!checkUserHasRightsForMeal(meal, userId))
                 throw new RuntimeException("User id mismatch with current user");
-            }
-
             int newId = idCounter.getAndIncrement();
             meal.setId(newId);
             repository.put(newId, meal);
@@ -71,8 +69,9 @@ public class InMemoryMealRepository extends InMemoryBaseRepository<Meal> impleme
         }
         log.debug("edit {}", meal);
         return repository.computeIfPresent(meal.getId(), (id, oldMeal) -> {
-            if (Objects.equals(oldMeal.getUserId(), userId))
+            if (checkUserHasRightsForMeal(oldMeal, userId))
                 return meal;
+            //TODO rethrow in service?
             throw new RuntimeException("User id mismatch with current user");
         });
     }
@@ -80,7 +79,8 @@ public class InMemoryMealRepository extends InMemoryBaseRepository<Meal> impleme
     @Override
     public boolean delete(Integer id, Integer userId) {
         log.debug("delete {}", id);
-        if (get(id, userId).isPresent())
+        Optional<Meal> meal = get(id, userId);
+        if (meal.isPresent() && checkUserHasRightsForMeal(meal.get(), userId))
             return repository.remove(id) != null;
         return false;
     }
@@ -124,6 +124,6 @@ public class InMemoryMealRepository extends InMemoryBaseRepository<Meal> impleme
         Collection<Meal> values = mealRepository.getAll(1);
         System.out.println(MealsUtil.getFilteredTos(values, 2000,
                 LocalDateTime.of(2022, 4, 29, 10, 0),
-                LocalDateTime.of(2022, 4, 30,16, 0)));
+                LocalDateTime.of(2022, 4, 30, 16, 0)));
     }
 }
