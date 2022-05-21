@@ -11,7 +11,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public abstract class InMemoryBaseRepository<T extends AbstractBaseEntity> {
     protected static final Logger log = LoggerFactory.getLogger(InMemoryUserRepository.class);
 
-    protected final AtomicInteger idCounter = new AtomicInteger(1);
+    protected static final AtomicInteger idCounter = new AtomicInteger(1);
     protected final Map<Integer, T> repository;
 
     public InMemoryBaseRepository() {
