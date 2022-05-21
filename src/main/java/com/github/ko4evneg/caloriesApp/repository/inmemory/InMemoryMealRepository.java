@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.Month;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -130,6 +129,8 @@ public class InMemoryMealRepository implements MealRepository {
         System.out.println("Correct delete: " + mealRepository.getAll(2));*/
 
         Collection<Meal> values = mealRepository.getAll(1);
-        System.out.println(MealsUtil.getFilteredTos(values, 2000, LocalTime.of(10, 0), LocalTime.of(16, 0)));
+        System.out.println(MealsUtil.getFilteredTos(values, 2000,
+                LocalDateTime.of(2022, 4, 29, 10, 0),
+                LocalDateTime.of(2022, 4, 30,16, 0)));
     }
 }
