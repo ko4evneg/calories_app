@@ -57,10 +57,10 @@ public class InMemoryMealRepository extends InMemoryBaseRepository<Meal> impleme
 
     @Override
     public Meal save(Meal meal, Integer userId) {
-        log.debug("save {}", meal);
         if (meal.isNew()) {
+            log.debug("save new {}", meal);
             if (!meal.getUserId().equals(userId)) {
-                //TODO: remove throw here?
+                //TODO: remove throw here? extract assertion
                 throw new RuntimeException("User id mismatch with current user");
             }
 
@@ -69,6 +69,7 @@ public class InMemoryMealRepository extends InMemoryBaseRepository<Meal> impleme
             repository.put(newId, meal);
             return meal;
         }
+        log.debug("edit {}", meal);
         return repository.computeIfPresent(meal.getId(), (id, oldMeal) -> {
             if (Objects.equals(oldMeal.getUserId(), userId))
                 return meal;

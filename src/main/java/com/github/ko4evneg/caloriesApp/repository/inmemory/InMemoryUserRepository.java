@@ -45,13 +45,14 @@ public class InMemoryUserRepository extends InMemoryBaseRepository<User> impleme
 
     @Override
     public User save(User user) {
-        log.debug("save {}", user);
         if (user.isNew()) {
+            log.debug("save new {}", user);
             int newId = idCounter.getAndIncrement();
             user.setId(newId);
             repository.put(newId, user);
             return user;
         }
+        log.debug("edit {}", user);
         return repository.computeIfPresent(user.getId(),(id, oldUser) ->  user);
     }
 
