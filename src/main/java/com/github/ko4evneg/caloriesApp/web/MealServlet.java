@@ -1,8 +1,8 @@
 package com.github.ko4evneg.caloriesApp.web;
 
+import com.github.ko4evneg.caloriesApp.SpringMain;
 import com.github.ko4evneg.caloriesApp.model.Meal;
 import com.github.ko4evneg.caloriesApp.service.MealService;
-import com.github.ko4evneg.caloriesApp.service.MealServiceImpl;
 import com.github.ko4evneg.caloriesApp.util.MealsUtil;
 import com.github.ko4evneg.caloriesApp.util.SecurityUtil;
 import org.slf4j.Logger;
@@ -22,7 +22,7 @@ import static com.github.ko4evneg.caloriesApp.util.MealsUtil.mapFromMeal;
 public class MealServlet extends HttpServlet {
     private static final Logger log = LoggerFactory.getLogger(MealServlet.class);
 
-    private final MealService mealService = new MealServiceImpl();
+    private final MealService mealService = SpringMain.getContext().getBean(MealService.class);
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {

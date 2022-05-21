@@ -1,32 +1,20 @@
 package com.github.ko4evneg.caloriesApp.repository.inmemory;
 
 import com.github.ko4evneg.caloriesApp.model.Role;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import com.github.ko4evneg.caloriesApp.model.User;
 import com.github.ko4evneg.caloriesApp.repository.UserRepository;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @Repository
-public class InMemoryUserRepository implements UserRepository {
+public class InMemoryUserRepository extends InMemoryBaseRepository<User> implements UserRepository {
     public static final int USER_ID = 1;
     public static final int ADMIN_ID = 2;
 
-    private static final Logger log = LoggerFactory.getLogger(InMemoryUserRepository.class);
-
-    private final AtomicInteger idCounter = new AtomicInteger(1000001);
-    private final Map<Integer, User> users;
-
     public InMemoryUserRepository() {
-        users = new ConcurrentHashMap<>();
-
         save(new User( "User", "user@mail.ru", "123", Role.USER));
         save(new User( "User", "user@mail.ru", "123", Role.ADMIN));
     }
@@ -34,7 +22,7 @@ public class InMemoryUserRepository implements UserRepository {
     @Override
     public List<User> getAll() {
         log.debug("getAll");
-        return users.values()
+        return repository.values()
                 .stream()
                 .sorted(Comparator.comparing(User::getName).thenComparing(User::getEmail))
                 .toList();
@@ -43,13 +31,13 @@ public class InMemoryUserRepository implements UserRepository {
     @Override
     public Optional<User> get(Integer id) {
         log.debug("get {}", id);
-        return Optional.ofNullable(users.get(id));
+        return Optional.ofNullable(repository.get(id));
     }
 
     @Override
     public Optional<User> getByEmail(String email) {
         log.debug("getByEmail {}", email);
-        return users.values()
+        return repository.values()
                 .stream()
                 .filter(user -> user.getEmail().equals(email))
                 .findFirst();
@@ -61,16 +49,16 @@ public class InMemoryUserRepository implements UserRepository {
         if (user.isNew()) {
             int newId = idCounter.getAndIncrement();
             user.setId(newId);
-            users.put(newId, user);
+            repository.put(newId, user);
             return user;
         }
-        return users.computeIfPresent(user.getId(),(id, oldUser) ->  user);
+        return repository.computeIfPresent(user.getId(),(id, oldUser) ->  user);
     }
 
     @Override
     public boolean delete(Integer id) {
         log.debug("delete {}", id);
-        return users.remove(id) != null;
+        return repository.remove(id) != null;
     }
 
     //TODO: move to tests

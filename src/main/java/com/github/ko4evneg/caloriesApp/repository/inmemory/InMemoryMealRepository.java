@@ -4,29 +4,21 @@ import com.github.ko4evneg.caloriesApp.model.Meal;
 import com.github.ko4evneg.caloriesApp.repository.MealRepository;
 import com.github.ko4evneg.caloriesApp.util.MealsUtil;
 import com.github.ko4evneg.caloriesApp.util.Util;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 
 import static com.github.ko4evneg.caloriesApp.repository.inmemory.InMemoryUserRepository.ADMIN_ID;
 import static com.github.ko4evneg.caloriesApp.repository.inmemory.InMemoryUserRepository.USER_ID;
 
 @Repository
-public class InMemoryMealRepository implements MealRepository {
-    private static final Logger log = LoggerFactory.getLogger(InMemoryMealRepository.class);
-
-    private final AtomicInteger idCounter = new AtomicInteger(1);
-    private final Map<Integer, Meal> meals;
+public class InMemoryMealRepository extends InMemoryBaseRepository<Meal> implements MealRepository {
 
     public InMemoryMealRepository() {
-        meals = new ConcurrentHashMap<>();
+        super();
 
         MealsUtil.meals.forEach(m -> save(m, USER_ID));
         save(new Meal(LocalDateTime.of(2015, Month.JUNE, 1, 14, 0), "Админ ланч", 510, ADMIN_ID), ADMIN_ID);
@@ -47,7 +39,7 @@ public class InMemoryMealRepository implements MealRepository {
 
     private List<Meal> getFiltered(Integer userId, Predicate<Meal> filter) {
         log.debug("getAllFiltered");
-        return meals.values().stream()
+        return repository.values().stream()
                 .filter(meal -> Objects.equals(meal.getUserId(), userId))
                 .filter(filter)
                 .sorted(Comparator.comparing(Meal::getDateTime).reversed())
@@ -57,7 +49,7 @@ public class InMemoryMealRepository implements MealRepository {
     @Override
     public Optional<Meal> get(Integer id, Integer userId) {
         log.debug("get {}", id);
-        Meal meal = meals.get(id);
+        Meal meal = repository.get(id);
         if (meal != null && Objects.equals(meal.getUserId(), userId))
             return Optional.of(meal);
         return Optional.empty();
@@ -74,10 +66,10 @@ public class InMemoryMealRepository implements MealRepository {
 
             int newId = idCounter.getAndIncrement();
             meal.setId(newId);
-            meals.put(newId, meal);
+            repository.put(newId, meal);
             return meal;
         }
-        return meals.computeIfPresent(meal.getId(), (id, oldMeal) -> {
+        return repository.computeIfPresent(meal.getId(), (id, oldMeal) -> {
             if (Objects.equals(oldMeal.getUserId(), userId))
                 return meal;
             throw new RuntimeException("User id mismatch with current user");
@@ -88,7 +80,7 @@ public class InMemoryMealRepository implements MealRepository {
     public boolean delete(Integer id, Integer userId) {
         log.debug("delete {}", id);
         if (get(id, userId).isPresent())
-            return meals.remove(id) != null;
+            return repository.remove(id) != null;
         return false;
     }
 
