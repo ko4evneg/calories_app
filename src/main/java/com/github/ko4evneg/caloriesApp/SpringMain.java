@@ -9,7 +9,7 @@ import java.time.LocalDate;
 import java.time.Month;
 
 public class SpringMain {
-    public static ApplicationContext context;
+    private static ClassPathXmlApplicationContext context;
 
     public static void main(String[] args) {
         try (ConfigurableApplicationContext appCtx = new ClassPathXmlApplicationContext("spring/spring-app.xml")) {
@@ -23,10 +23,11 @@ public class SpringMain {
         }
     }
 
-    public static ApplicationContext getContext() {
-        context = context == null ?
-                new ClassPathXmlApplicationContext("spring/spring-app.xml") :
-                context;
+    public static ClassPathXmlApplicationContext getContext() {
         return context;
+    }
+
+    public static void setContext(ClassPathXmlApplicationContext context) {
+        SpringMain.context = context;
     }
 }

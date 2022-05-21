@@ -33,4 +33,8 @@
     <session-config>
         <session-timeout>30</session-timeout>    <!-- 30 minutes -->
     </session-config>
+
+    <listener>
+        <listener-class>com.github.ko4evneg.caloriesApp.web.CaloriesServletContextListener</listener-class>
+    </listener>
 </web-app>
