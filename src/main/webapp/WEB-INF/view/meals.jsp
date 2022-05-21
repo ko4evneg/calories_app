@@ -8,6 +8,10 @@
             border: 1px solid;
             border-collapse: collapse;
         }
+
+        .noBorderTableElem {
+            border: none;
+        }
     </style>
     <title>Meals</title>
 </head>
@@ -15,13 +19,33 @@
 <h3><a href="../../index.html">Home</a></h3>
 <hr>
 <h2>Meals</h2>
+<form method="post" style="border: none">
+    <table class="noBorderTableElem">
+        <tr class="noBorderTableElem">
+            <td class="noBorderTableElem">
+                <label for="sDate">Start date:</label>
+                <input type="date" name="startDate" id="sDate">
+                <br><br>
+                <label for="sTime">Start time:</label>
+                <input type="time" name="startTime" id="sTime">
+            </td>
+            <td class="noBorderTableElem">
+                <label for="eDate">End date:</label>
+                <input type="date" name="endDate" id="eDate">
+                <br><br>
+                <label for="eTime">End time:</label>
+                <input type="time" name="endTime" id="eTime">
+            </td>
+        </tr>
+    </table>
+    <input type="submit" name="action" value="Filter"/>
+</form>
 <table>
     <tr>
         <th>Description</th>
         <th>Calories</th>
         <th>Date</th>
     </tr>
-
     <jsp:useBean id="meals" scope="request" type="java.util.List"/>
     <c:forEach var="meal" items="${meals}">
         <c:set var="color" value="color: black;"/>
