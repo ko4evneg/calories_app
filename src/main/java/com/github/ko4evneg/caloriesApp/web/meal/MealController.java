@@ -16,8 +16,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
-import static com.github.ko4evneg.caloriesApp.util.DateTimeUtil.roundingConvertToEndDateTime;
-import static com.github.ko4evneg.caloriesApp.util.DateTimeUtil.roundingConvertToStartDateTime;
+import static com.github.ko4evneg.caloriesApp.util.DateTimeUtil.*;
 import static com.github.ko4evneg.caloriesApp.util.SecurityUtil.authUserId;
 
 @Controller
@@ -45,14 +44,14 @@ public class MealController {
 
     public List<MealTo> getBetween(@Nullable LocalDate startDate, @Nullable LocalTime startTime,
                                    @Nullable LocalDate endDate, @Nullable LocalTime endTime) {
-        log.debug("getBetween");
         int userId = SecurityUtil.authUserId();
+        log.info("getBetween dates({} - {}) time({} - {}) for user {}", startDate, endDate, startTime, endTime, userId);
 
-        LocalDateTime startDateTime = roundingConvertToStartDateTime(startDate, startTime);
-        LocalDateTime endDateTime = roundingConvertToEndDateTime(endDate, endTime);
+        LocalDateTime startDateTime = getStartSearchDay(startDate);
+        LocalDateTime endDateTime = getEndSearchDay(endDate);
         List<Meal> mealsDateFiltered = service.getBetweenInclusive(startDateTime, endDateTime, userId);
 
-        return MealsUtil.getFilteredTos(mealsDateFiltered, SecurityUtil.authUserCaloriesPerDay(), startDateTime, endDateTime);
+        return MealsUtil.getFilteredTos(mealsDateFiltered, SecurityUtil.authUserCaloriesPerDay(), startTime, endTime);
     }
 
     public void delete(Integer mealId) {

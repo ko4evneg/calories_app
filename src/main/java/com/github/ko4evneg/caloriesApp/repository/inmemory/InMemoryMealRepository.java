@@ -6,13 +6,17 @@ import com.github.ko4evneg.caloriesApp.util.MealsUtil;
 import com.github.ko4evneg.caloriesApp.util.Util;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.Month;
 import java.util.*;
 import java.util.function.Predicate;
 
 import static com.github.ko4evneg.caloriesApp.repository.inmemory.InMemoryUserRepository.ADMIN_ID;
 import static com.github.ko4evneg.caloriesApp.repository.inmemory.InMemoryUserRepository.USER_ID;
+import static com.github.ko4evneg.caloriesApp.util.DateTimeUtil.getEndSearchDay;
+import static com.github.ko4evneg.caloriesApp.util.DateTimeUtil.getStartSearchDay;
 import static com.github.ko4evneg.caloriesApp.util.ValidationUtil.checkUserHasRightsForMeal;
 
 @Repository
@@ -121,9 +125,10 @@ public class InMemoryMealRepository extends InMemoryBaseRepository<Meal> impleme
         mealRepository.delete(8, 2);
         System.out.println("Correct delete: " + mealRepository.getAll(2));*/
 
-        Collection<Meal> values = mealRepository.getAll(1);
-        System.out.println(MealsUtil.getFilteredTos(values, 2000,
-                LocalDateTime.of(2022, 4, 29, 10, 0),
-                LocalDateTime.of(2022, 4, 30, 16, 0)));
+        Collection<Meal> values = mealRepository.getBetweenHalfOpen(
+                getStartSearchDay(LocalDate.of(2022,4,30)),
+                getEndSearchDay(LocalDate.of(2022,4,30)),
+                1);
+        System.out.println(MealsUtil.getFilteredTos(values, 2000, LocalTime.of(10, 0), LocalTime.of(22, 0)));
     }
 }

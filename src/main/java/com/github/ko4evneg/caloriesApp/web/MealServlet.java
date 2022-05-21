@@ -6,6 +6,7 @@ import com.github.ko4evneg.caloriesApp.service.MealService;
 import com.github.ko4evneg.caloriesApp.util.DateTimeUtil;
 import com.github.ko4evneg.caloriesApp.util.MealsUtil;
 import com.github.ko4evneg.caloriesApp.util.SecurityUtil;
+import com.github.ko4evneg.caloriesApp.web.meal.MealController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,7 +19,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 import java.util.Objects;
 
 import static com.github.ko4evneg.caloriesApp.util.MealsUtil.mapFromMeal;
@@ -27,6 +27,7 @@ public class MealServlet extends HttpServlet {
     private static final Logger log = LoggerFactory.getLogger(MealServlet.class);
 
     private final MealService mealService = SpringMain.getContext().getBean(MealService.class);
+    private final MealController mealController = SpringMain.getContext().getBean(MealController.class);
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
@@ -58,22 +59,13 @@ public class MealServlet extends HttpServlet {
                 mealService.save(meal, userId);
             }
             case "filter" -> {
-                DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-                DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
-                String startDateString = request.getParameter("startDate");
-                String startTimeString = request.getParameter("startTime");
-                String endDateString = request.getParameter("endDate");
-                String endTimeString = request.getParameter("endTime");
-                LocalDateTime startDateTime = DateTimeUtil.roundingConvertToStartDateTime(
-                        startDateString == null || startDateString.isBlank() ? null : LocalDate.parse(startDateString, dateFormatter),
-                        startTimeString == null || startTimeString.isBlank() ? null : LocalTime.parse(startTimeString, timeFormatter));
-                LocalDateTime endDateTime = DateTimeUtil.roundingConvertToEndDateTime(
-                        startDateString == null || endDateString.isBlank() ? null : LocalDate.parse(endDateString, dateFormatter),
-                        startTimeString == null || endTimeString.isBlank() ? null : LocalTime.parse(endTimeString, timeFormatter));
+                LocalDate startDateString = DateTimeUtil.parseLocalDate(request.getParameter("startDate"));
+                LocalTime startTimeString = DateTimeUtil.parseLocalTime(request.getParameter("startTime"));
+                LocalDate endDateString = DateTimeUtil.parseLocalDate(request.getParameter("endDate"));
+                LocalTime endTimeString = DateTimeUtil.parseLocalTime(request.getParameter("endTime"));
 
                 log.debug("Filter all meals");
-                request.setAttribute("meals",
-                        MealsUtil.getTos(mealService.getBetweenInclusive(startDateTime, endDateTime, userId), MealsUtil.DEFAULT_CALORIES_PER_DAY));
+                request.setAttribute("meals", mealController.getBetween(startDateString, startTimeString, endDateString, endTimeString));
                 request.getRequestDispatcher("WEB-INF/view/meals.jsp").forward(request, response);
             }
         }
