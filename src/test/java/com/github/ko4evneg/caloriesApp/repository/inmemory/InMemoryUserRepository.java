@@ -9,14 +9,23 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
+import static com.github.ko4evneg.caloriesApp.UserTestData.*;
+
 @Repository
 public class InMemoryUserRepository extends InMemoryBaseRepository<User> implements UserRepository {
     public static final int USER_ID = 1;
     public static final int ADMIN_ID = 2;
 
     public InMemoryUserRepository() {
-        save(new User( "User", "user@mail.ru", "123", Role.USER));
-        save(new User( "User", "user@mail.ru", "123", Role.ADMIN));
+        save(new User("User", "user@mail.ru", "123", Role.USER));
+        save(new User("User", "user@mail.ru", "123", Role.ADMIN));
+    }
+
+    @Override
+    public void init() {
+        super.init();
+        repository.put(1, user);
+        repository.put(2, admin);
     }
 
     @Override
@@ -53,7 +62,7 @@ public class InMemoryUserRepository extends InMemoryBaseRepository<User> impleme
             return user;
         }
         log.debug("edit {}", user);
-        return repository.computeIfPresent(user.getId(),(id, oldUser) ->  user);
+        return repository.computeIfPresent(user.getId(), (id, oldUser) -> user);
     }
 
     @Override

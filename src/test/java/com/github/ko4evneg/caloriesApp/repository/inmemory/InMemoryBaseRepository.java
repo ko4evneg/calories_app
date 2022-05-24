@@ -17,4 +17,9 @@ public abstract class InMemoryBaseRepository<T extends AbstractBaseEntity> {
     public InMemoryBaseRepository() {
         repository = new ConcurrentHashMap<>();
     }
+
+    public void init() {
+        idCounter.set(3);
+        repository.clear();
+    }
 }
