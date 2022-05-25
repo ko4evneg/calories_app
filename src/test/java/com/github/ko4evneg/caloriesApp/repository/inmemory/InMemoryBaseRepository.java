@@ -19,7 +19,7 @@ public abstract class InMemoryBaseRepository<T extends AbstractBaseEntity> {
     }
 
     public void init() {
-        idCounter.set(3);
         repository.clear();
+        idCounter.set(1);
     }
 }

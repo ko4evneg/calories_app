@@ -27,6 +27,7 @@ public class InMemoryUserRepository extends InMemoryBaseRepository<User> impleme
         super.init();
         repository.put(1, user);
         repository.put(2, admin);
+        idCounter.set(3);
     }
 
     @Override
