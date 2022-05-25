@@ -100,11 +100,11 @@ public class InMemoryUserControllerTest {
 
     @Test
     public void createNew() {
-        User expectedUser = new User(NEW_ID, "uzr", "u@z.r", "pwd123", 1750, true, EnumSet.of(Role.USER));
+        User expectedUser = new User(NEW_USER_ID, "uzr", "u@z.r", "pwd123", 1750, true, EnumSet.of(Role.USER));
         User user = new User(null, "uzr", "u@z.r", "pwd123", 1750, true, EnumSet.of(Role.USER));
 
         User createdUser = controller.create(user);
-        User actualUser = controller.get(NEW_ID);
+        User actualUser = controller.get(NEW_USER_ID);
 
         assertEquals(expectedUser, createdUser);
         assertEquals(expectedUser, actualUser);
@@ -112,7 +112,7 @@ public class InMemoryUserControllerTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void createNewFail() {
-        User user = new User(NEW_ID, "uzr", "u@z.r", "pwd123", 1750, true, EnumSet.of(Role.USER));
+        User user = new User(NEW_USER_ID, "uzr", "u@z.r", "pwd123", 1750, true, EnumSet.of(Role.USER));
         controller.create(user);
     }
 
@@ -129,12 +129,12 @@ public class InMemoryUserControllerTest {
     @Test(expected = IllegalArgumentException.class)
     public void updateNotConsistent() {
         User user = new User(USER_ID, "uzr", "u@z.r", "pwd123", 1750, true, EnumSet.of(Role.USER));
-        controller.update(user, NEW_ID);
+        controller.update(user, NEW_USER_ID);
     }
 
     @Test(expected = NotFoundException.class)
     public void updateNotFound() {
-        User user = new User(NEW_ID, "uzr", "u@z.r", "pwd123", 1750, true, EnumSet.of(Role.USER));
-        controller.update(user, NEW_ID);
+        User user = new User(NEW_USER_ID, "uzr", "u@z.r", "pwd123", 1750, true, EnumSet.of(Role.USER));
+        controller.update(user, NEW_USER_ID);
     }
 }
