@@ -5,6 +5,7 @@ import com.github.ko4evneg.caloriesApp.model.Meal;
 import com.github.ko4evneg.caloriesApp.repository.MealRepository;
 import com.github.ko4evneg.caloriesApp.util.MealsUtil;
 import com.github.ko4evneg.caloriesApp.util.Util;
+import com.github.ko4evneg.caloriesApp.util.exception.NotFoundException;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -74,7 +75,7 @@ public class InMemoryMealRepository extends InMemoryBaseRepository<Meal> impleme
         if (meal.isNew()) {
             log.debug("save new {}", meal);
             if (!checkUserHasRightsForMeal(meal, userId))
-                throw new RuntimeException("User id mismatch with current user");
+                throw new NotFoundException("Meal not found!");
             int newId = idCounter.getAndIncrement();
             meal.setId(newId);
             repository.put(newId, meal);
@@ -85,7 +86,7 @@ public class InMemoryMealRepository extends InMemoryBaseRepository<Meal> impleme
             if (checkUserHasRightsForMeal(oldMeal, userId))
                 return meal;
             //TODO rethrow in service?
-            throw new RuntimeException("User id mismatch with current user");
+            throw new NotFoundException("Meal not found!");
         });
     }
 
@@ -101,38 +102,6 @@ public class InMemoryMealRepository extends InMemoryBaseRepository<Meal> impleme
     //TODO: move to tests
     public static void main(String[] args) {
         MealRepository mealRepository = new InMemoryMealRepository();
- /*
-        System.out.println(mealRepository.getAll(1));
-
-        System.out.println(mealRepository.get(5, 1));
-
-        mealRepository.delete(5, 1);
-        System.out.println(mealRepository.get(5, 1));
-
-        mealRepository.save(new Meal(LocalDateTime.now(), "desc", 123123, 1), 1);
-        System.out.println(mealRepository.get(8, 1));
-  */
- /*       Meal meal = new Meal(LocalDateTime.now(), "desc", 123123, 2);
-        Meal dupMeal = new Meal(LocalDateTime.now(), "desc", 123123, 2);
-
-        mealRepository.save(meal, 2);
-        System.out.println("All user2 meals (should be 1): " + mealRepository.getAll(2));
-        System.out.println("All user2 meals (should be 7): " + mealRepository.getAll(1));
-
-        try {
-            mealRepository.save(new Meal(LocalDateTime.now(), "desc", 55, 2), 1);
-        } catch (Exception e) {
-            System.out.println("failed wrong userId in meal save" + mealRepository.getAll(2));
-        }
-
-        System.out.println("Correct userId meal retrieval: " + mealRepository.get(1, 1));
-        System.out.println("Wrong userId meal retrieval: " + mealRepository.get(1, 2));
-
-        mealRepository.delete(8, 1);
-        System.out.println("Wrong user delete: " + mealRepository.getAll(2));
-
-        mealRepository.delete(8, 2);
-        System.out.println("Correct delete: " + mealRepository.getAll(2));*/
 
         Collection<Meal> values = mealRepository.getBetweenHalfOpen(
                 getStartSearchDay(LocalDate.of(2022, 4, 30)),
