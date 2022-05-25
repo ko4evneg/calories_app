@@ -14,7 +14,7 @@ import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
 
-import static com.github.ko4evneg.caloriesApp.UserTestData.*;
+import static com.github.ko4evneg.caloriesApp.TestingData.*;
 import static org.junit.Assert.*;
 
 public class InMemoryAdminControllerTest {
