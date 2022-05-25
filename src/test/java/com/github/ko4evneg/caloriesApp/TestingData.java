@@ -22,16 +22,16 @@ public class TestingData {
     public static final int MEAL_USER_TWO_ID = 9;
     public static final int NEW_MEAL_ID = 10;
 
-    public static final Meal singleMeal = new Meal(LocalDateTime.of(2022, Month.APRIL, 29, 10, 0), "Breakfast", 500, USER_ID);
+    public static final Meal singleMeal = new Meal(1, LocalDateTime.of(2022, Month.APRIL, 29, 10, 0), "Breakfast", 500, USER_ID);
 
     public static final List<Meal> meals = new ArrayList<>(List.of(
             singleMeal,
-            new Meal(LocalDateTime.of(2022, Month.APRIL, 29, 13, 0), "Dinner", 1000, USER_ID),
-            new Meal(LocalDateTime.of(2022, Month.APRIL, 29, 20, 0), "Supper", 500, USER_ID),
-            new Meal(LocalDateTime.of(2022, Month.APRIL, 30, 0, 0), "Edge case", 100, USER_ID),
-            new Meal(LocalDateTime.of(2022, Month.APRIL, 30, 10, 0), "Breakfast", 1000, USER_ID),
-            new Meal(LocalDateTime.of(2022, Month.APRIL, 30, 13, 0), "Dinner", 500, USER_ID),
-            new Meal(LocalDateTime.of(2022, Month.APRIL, 30, 20, 0), "Supper", 410, USER_ID),
-            new Meal(LocalDateTime.of(2015, Month.JUNE, 1, 14, 0), "Админ ланч", 510, ADMIN_ID),
-            new Meal(LocalDateTime.of(2015, Month.JUNE, 1, 21, 0), "Админ ужин", 1500, ADMIN_ID)));
+            new Meal(2, LocalDateTime.of(2022, Month.APRIL, 29, 13, 0), "Dinner", 1000, USER_ID),
+            new Meal(3, LocalDateTime.of(2022, Month.APRIL, 29, 20, 0), "Supper", 500, USER_ID),
+            new Meal(4, LocalDateTime.of(2022, Month.APRIL, 30, 0, 0), "Edge case", 100, USER_ID),
+            new Meal(5, LocalDateTime.of(2022, Month.APRIL, 30, 10, 0), "Breakfast", 1000, USER_ID),
+            new Meal(6, LocalDateTime.of(2022, Month.APRIL, 30, 13, 0), "Dinner", 500, USER_ID),
+            new Meal(7, LocalDateTime.of(2022, Month.APRIL, 30, 20, 0), "Supper", 410, USER_ID),
+            new Meal(8, LocalDateTime.of(2015, Month.JUNE, 1, 14, 0), "Админ ланч", 510, ADMIN_ID),
+            new Meal(9, LocalDateTime.of(2015, Month.JUNE, 1, 21, 0), "Админ ужин", 1500, ADMIN_ID)));
 }

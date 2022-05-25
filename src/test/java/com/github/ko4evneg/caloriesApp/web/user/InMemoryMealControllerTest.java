@@ -1,7 +1,6 @@
 package com.github.ko4evneg.caloriesApp.web.user;
 
 import com.github.ko4evneg.caloriesApp.model.Meal;
-import com.github.ko4evneg.caloriesApp.model.Role;
 import com.github.ko4evneg.caloriesApp.repository.inmemory.InMemoryMealRepository;
 import com.github.ko4evneg.caloriesApp.to.MealTo;
 import com.github.ko4evneg.caloriesApp.util.MealsUtil;
@@ -18,7 +17,6 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.EnumSet;
 import java.util.List;
 
 import static com.github.ko4evneg.caloriesApp.TestingData.*;
@@ -67,6 +65,7 @@ public class InMemoryMealControllerTest {
     public void deleteWrongUser() {
         assertTrue(repository.get(MEAL_USER_TWO_ID, ADMIN_ID).isPresent());
         controller.delete(MEAL_USER_TWO_ID);
+        assertTrue(repository.get(MEAL_USER_TWO_ID, ADMIN_ID).isPresent());
     }
 
     @Test
@@ -110,31 +109,22 @@ public class InMemoryMealControllerTest {
         assertEquals(expectedMeal, actualMeal);
     }
 
-//    @Test(expected = IllegalArgumentException.class)
-//    public void createNewFail() {
-//        Meal user = new Meal(NEW_ID, "uzr", "u@z.r", "pwd123", 1750, true, EnumSet.of(Role.USER));
-//        controller.create(user);
-//    }
-//
-//    @Test
-//    public void update() {
-//        User user = new User(USER_ID, "uzr", "u@z.r", "pwd123", 1750, true, EnumSet.of(Role.USER));
-//        controller.update(user, USER_ID);
-//
-//        User actualUser = controller.get(USER_ID);
-//
-//        assertEquals(user, actualUser);
-//    }
-//
-//    @Test(expected = IllegalArgumentException.class)
-//    public void updateNotConsistent() {
-//        User user = new User(USER_ID, "uzr", "u@z.r", "pwd123", 1750, true, EnumSet.of(Role.USER));
-//        controller.update(user, NEW_ID);
-//    }
-//
-//    @Test(expected = NotFoundException.class)
-//    public void updateNotFound() {
-//        User user = new User(NEW_ID, "uzr", "u@z.r", "pwd123", 1750, true, EnumSet.of(Role.USER));
-//        controller.update(user, NEW_ID);
-//    }
+    @Test(expected = NotFoundException.class)
+    public void createOrEditAlienFail() {
+        Meal meal = new Meal(MEAL_USER_TWO_ID, LocalDateTime.of(2022, 10, 3, 15, 21), "la meal", 507, USER_ID);
+        controller.save(meal);
+    }
+
+    @Test
+    public void editSelf() {
+        Meal meal = new Meal(MEAL_USER_ONE_ID, LocalDateTime.of(2022, 10, 3, 15, 21), "la meal", 507, USER_ID);
+        controller.save(meal);
+        assertEquals(MealsUtil.mapFromMeal(meal), controller.get(meal.getId()));
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void editNotExistingFail() {
+        Meal meal = new Meal(NEW_MEAL_ID, LocalDateTime.of(2022, 10, 3, 15, 21), "la meal", 507, USER_ID);
+        controller.save(meal);
+    }
 }
