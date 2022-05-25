@@ -17,6 +17,7 @@ public class InMemoryUserRepository extends InMemoryBaseRepository<User> impleme
     public static final int ADMIN_ID = 2;
 
     public InMemoryUserRepository() {
+        //Init for testing
         save(new User("User", "user@mail.ru", "123", Role.USER));
         save(new User("User", "user@mail.ru", "123", Role.ADMIN));
     }

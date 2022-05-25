@@ -2,33 +2,37 @@ package com.github.ko4evneg.caloriesApp.web.user;
 
 import com.github.ko4evneg.caloriesApp.model.Role;
 import com.github.ko4evneg.caloriesApp.model.User;
-import org.junit.*;
+import com.github.ko4evneg.caloriesApp.repository.inmemory.InMemoryUserRepository;
+import com.github.ko4evneg.caloriesApp.util.exception.NotFoundException;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import com.github.ko4evneg.caloriesApp.repository.inmemory.InMemoryUserRepository;
-import com.github.ko4evneg.caloriesApp.util.exception.NotFoundException;
 
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
 
 import static com.github.ko4evneg.caloriesApp.UserTestData.*;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
-public class InMemoryAdminControllerTest {
-    private static final Logger log = LoggerFactory.getLogger(InMemoryAdminControllerTest.class);
+public class InMemoryUserControllerTest {
+    private static final Logger log = LoggerFactory.getLogger(InMemoryUserControllerTest.class);
 
     private static ConfigurableApplicationContext appCtx;
-    private static AdminController controller;
+    private static ProfileController controller;
     private static InMemoryUserRepository repository;
 
     @BeforeClass
     public static void beforeClass() {
         appCtx = new ClassPathXmlApplicationContext("spring/spring-app.xml");
         log.info("\n{}\n", Arrays.toString(appCtx.getBeanDefinitionNames()));
-        controller = appCtx.getBean(AdminController.class);
+        controller = appCtx.getBean(ProfileController.class);
         repository = appCtx.getBean(InMemoryUserRepository.class);
     }
 
@@ -44,8 +48,8 @@ public class InMemoryAdminControllerTest {
 
     @Test
     public void deleteExisting() {
-        controller.delete(ADMIN_ID);
-        assertTrue(repository.get(ADMIN_ID).isEmpty());
+        controller.delete(USER_ID);
+        assertTrue(repository.get(USER_ID).isEmpty());
     }
 
     @Test(expected = NotFoundException.class)
@@ -55,8 +59,8 @@ public class InMemoryAdminControllerTest {
 
     @Test
     public void getExisting() {
-        User actualAdmin = controller.get(ADMIN_ID);
-        assertEquals(admin, actualAdmin);
+        User actualUser = controller.get(USER_ID);
+        assertEquals(user, actualUser);
     }
 
     @Test(expected = NotFoundException.class)
@@ -66,14 +70,14 @@ public class InMemoryAdminControllerTest {
 
     @Test
     public void getByMailExisting() {
-        User actualAdmin = controller.getByMail(admin.getEmail());
-        assertEquals(admin, actualAdmin);
+        User actualUser = controller.getByMail(user.getEmail());
+        assertEquals(user, actualUser);
     }
 
     @Test(expected = NotFoundException.class)
     public void getByMailNotFound() {
-        User actualAdmin = controller.getByMail("random@email.com");
-        assertEquals(admin, actualAdmin);
+        User actualUser = controller.getByMail("random@email.com");
+        assertEquals(user, actualUser);
     }
 
 
@@ -96,41 +100,41 @@ public class InMemoryAdminControllerTest {
 
     @Test
     public void createNew() {
-        User expectedAdminUser = new User(NEW_ID, "admino", "e@ma.il", "pwd123", 1750, true, EnumSet.of(Role.ADMIN));
-        User adminUser = new User(null, "admino", "e@ma.il", "pwd123", 1750, true, EnumSet.of(Role.ADMIN));
+        User expectedUser = new User(NEW_ID, "uzr", "u@z.r", "pwd123", 1750, true, EnumSet.of(Role.USER));
+        User user = new User(null, "uzr", "u@z.r", "pwd123", 1750, true, EnumSet.of(Role.USER));
 
-        User createdAdminUser = controller.create(adminUser);
-        User actualAdminUser = controller.get(NEW_ID);
+        User createdUser = controller.create(user);
+        User actualUser = controller.get(NEW_ID);
 
-        assertEquals(expectedAdminUser, createdAdminUser);
-        assertEquals(expectedAdminUser, actualAdminUser);
+        assertEquals(expectedUser, createdUser);
+        assertEquals(expectedUser, actualUser);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void createNewFail() {
-        User adminUser = new User(NEW_ID, "admino", "e@ma.il", "pwd123", 1750, true, EnumSet.of(Role.ADMIN));
-        controller.create(adminUser);
+        User user = new User(NEW_ID, "uzr", "u@z.r", "pwd123", 1750, true, EnumSet.of(Role.USER));
+        controller.create(user);
     }
 
     @Test
     public void update() {
-        User adminUser = new User(ADMIN_ID, "admino", "e@ma.il", "pwd123", 1750, true, EnumSet.of(Role.ADMIN));
-        controller.update(adminUser, ADMIN_ID);
+        User user = new User(USER_ID, "uzr", "u@z.r", "pwd123", 1750, true, EnumSet.of(Role.USER));
+        controller.update(user, USER_ID);
 
-        User actualAdminUser = controller.get(ADMIN_ID);
+        User actualUser = controller.get(USER_ID);
 
-        assertEquals(adminUser, actualAdminUser);
+        assertEquals(user, actualUser);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void updateNotConsistent() {
-        User adminUser = new User(ADMIN_ID, "admino", "e@ma.il", "pwd123", 1750, true, EnumSet.of(Role.ADMIN));
-        controller.update(adminUser, NEW_ID);
+        User user = new User(USER_ID, "uzr", "u@z.r", "pwd123", 1750, true, EnumSet.of(Role.USER));
+        controller.update(user, NEW_ID);
     }
 
     @Test(expected = NotFoundException.class)
     public void updateNotFound() {
-        User adminUser = new User(NEW_ID, "admino", "e@ma.il", "pwd123", 1750, true, EnumSet.of(Role.ADMIN));
-        controller.update(adminUser, NEW_ID);
+        User user = new User(NEW_ID, "uzr", "u@z.r", "pwd123", 1750, true, EnumSet.of(Role.USER));
+        controller.update(user, NEW_ID);
     }
 }
