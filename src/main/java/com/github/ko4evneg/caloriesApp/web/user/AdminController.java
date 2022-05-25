@@ -6,7 +6,7 @@ import com.github.ko4evneg.caloriesApp.model.User;
 import java.util.List;
 
 @Controller
-public class AdminRestController extends AbstractUserController {
+public class AdminController extends AbstractUserController {
 
     @Override
     public List<User> getAll() {
