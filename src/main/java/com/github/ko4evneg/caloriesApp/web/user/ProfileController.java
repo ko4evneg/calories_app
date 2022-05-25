@@ -6,7 +6,7 @@ import com.github.ko4evneg.caloriesApp.model.User;
 import static com.github.ko4evneg.caloriesApp.util.SecurityUtil.authUserId;
 
 @Controller
-public class ProfileRestController extends AbstractUserController {
+public class ProfileController extends AbstractUserController {
 
     public User get() {
         return super.get(authUserId());
