@@ -1,5 +1,12 @@
 package com.github.ko4evneg.caloriesApp.model;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+@EqualsAndHashCode(callSuper = true)
 public abstract class AbstractNamedEntity extends AbstractBaseEntity {
 
     protected String name;
@@ -7,14 +14,6 @@ public abstract class AbstractNamedEntity extends AbstractBaseEntity {
     protected AbstractNamedEntity(Integer id, String name) {
         super(id);
         this.name = name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getName() {
-        return this.name;
     }
 
     @Override
