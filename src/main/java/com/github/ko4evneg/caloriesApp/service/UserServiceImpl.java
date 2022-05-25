@@ -3,21 +3,17 @@ package com.github.ko4evneg.caloriesApp.service;
 import com.github.ko4evneg.caloriesApp.model.User;
 import com.github.ko4evneg.caloriesApp.repository.UserRepository;
 import com.github.ko4evneg.caloriesApp.util.exception.NotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    private UserRepository userRepository;
-
-    @Autowired
-    public UserServiceImpl(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+    private final UserRepository userRepository;
 
     @Override
     public User get(Integer userId) {

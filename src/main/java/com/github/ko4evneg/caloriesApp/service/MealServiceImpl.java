@@ -3,7 +3,7 @@ package com.github.ko4evneg.caloriesApp.service;
 import com.github.ko4evneg.caloriesApp.model.Meal;
 import com.github.ko4evneg.caloriesApp.repository.MealRepository;
 import com.github.ko4evneg.caloriesApp.util.exception.NotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -11,14 +11,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class MealServiceImpl implements MealService {
 
-    private MealRepository mealRepository;
-
-    @Autowired
-    public MealServiceImpl(MealRepository mealRepository) {
-        this.mealRepository = mealRepository;
-    }
+    private final MealRepository mealRepository;
 
     @Override
     public List<Meal> getAll(Integer userId) {

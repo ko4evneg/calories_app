@@ -5,9 +5,9 @@ import com.github.ko4evneg.caloriesApp.service.MealService;
 import com.github.ko4evneg.caloriesApp.to.MealTo;
 import com.github.ko4evneg.caloriesApp.util.MealsUtil;
 import com.github.ko4evneg.caloriesApp.util.SecurityUtil;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
 
@@ -20,15 +20,11 @@ import static com.github.ko4evneg.caloriesApp.util.DateTimeUtil.*;
 import static com.github.ko4evneg.caloriesApp.util.SecurityUtil.authUserId;
 
 @Controller
+@RequiredArgsConstructor
 public class MealController {
     private static final Logger log = LoggerFactory.getLogger(MealController.class);
 
     private final MealService service;
-
-    @Autowired
-    public MealController(MealService service) {
-        this.service = service;
-    }
 
     public List<MealTo> getAll() {
         log.debug("getAll");
