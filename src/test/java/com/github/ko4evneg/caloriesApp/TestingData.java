@@ -13,13 +13,14 @@ public class TestingData {
     public static final int USER_ID = 1;
     public static final int ADMIN_ID = 2;
     public static final int NOT_FOUND_ID = 10;
-    public static final int NEW_ID = 3;
+    public static final int NEW_USER_ID = 3;
 
     public static final User user = new User(USER_ID, "User", "user@yandex.ru", "password", Role.USER);
     public static final User admin = new User(ADMIN_ID, "Admin", "admin@gmail.com", "admin", Role.ADMIN);
 
     public static final int MEAL_USER_ONE_ID = 1;
     public static final int MEAL_USER_TWO_ID = 9;
+    public static final int NEW_MEAL_ID = 10;
 
     public static final Meal singleMeal = new Meal(LocalDateTime.of(2022, Month.APRIL, 29, 10, 0), "Breakfast", 500, USER_ID);
 

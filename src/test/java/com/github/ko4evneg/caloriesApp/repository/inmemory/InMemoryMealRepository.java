@@ -1,5 +1,6 @@
 package com.github.ko4evneg.caloriesApp.repository.inmemory;
 
+import com.github.ko4evneg.caloriesApp.TestingData;
 import com.github.ko4evneg.caloriesApp.model.Meal;
 import com.github.ko4evneg.caloriesApp.repository.MealRepository;
 import com.github.ko4evneg.caloriesApp.util.MealsUtil;
@@ -11,6 +12,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.Month;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 
 import static com.github.ko4evneg.caloriesApp.repository.inmemory.InMemoryUserRepository.ADMIN_ID;
@@ -24,10 +26,17 @@ public class InMemoryMealRepository extends InMemoryBaseRepository<Meal> impleme
 
     public InMemoryMealRepository() {
         super();
-
-        MealsUtil.meals.forEach(m -> save(m, USER_ID));
+        //Data for manual testing
         save(new Meal(LocalDateTime.of(2015, Month.JUNE, 1, 14, 0), "Админ ланч", 510, ADMIN_ID), ADMIN_ID);
         save(new Meal(LocalDateTime.of(2015, Month.JUNE, 1, 21, 0), "Админ ужин", 1500, ADMIN_ID), ADMIN_ID);
+    }
+
+    @Override
+    public void init() {
+        super.init();
+        AtomicInteger id = new AtomicInteger(1);
+        TestingData.meals.forEach(m -> repository.put(id.getAndIncrement(), m));
+        idCounter.set(10);
     }
 
     @Override
@@ -126,8 +135,8 @@ public class InMemoryMealRepository extends InMemoryBaseRepository<Meal> impleme
         System.out.println("Correct delete: " + mealRepository.getAll(2));*/
 
         Collection<Meal> values = mealRepository.getBetweenHalfOpen(
-                getStartSearchDay(LocalDate.of(2022,4,30)),
-                getEndSearchDay(LocalDate.of(2022,4,30)),
+                getStartSearchDay(LocalDate.of(2022, 4, 30)),
+                getEndSearchDay(LocalDate.of(2022, 4, 30)),
                 1);
         System.out.println(MealsUtil.getFilteredTos(values, 2000, LocalTime.of(10, 0), LocalTime.of(22, 0)));
     }
