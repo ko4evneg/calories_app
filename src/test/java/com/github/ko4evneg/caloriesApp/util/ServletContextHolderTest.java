@@ -12,7 +12,7 @@ public class ServletContextHolderTest {
 
         assertNull(actualContext);
 
-        ServletContextHolder.setContext(new ClassPathXmlApplicationContext("spring/spring-test.xml"));
+        ServletContextHolder.setContext(new ClassPathXmlApplicationContext("spring/spring-empty-test.xml"));
         actualContext = ServletContextHolder.getContext();
 
         assertNotNull(actualContext);
