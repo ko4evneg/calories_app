@@ -6,42 +6,27 @@ import com.github.ko4evneg.caloriesApp.to.MealTo;
 import com.github.ko4evneg.caloriesApp.util.MealsUtil;
 import com.github.ko4evneg.caloriesApp.util.exception.NotFoundException;
 import com.github.ko4evneg.caloriesApp.web.meal.MealController;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
 
 import static com.github.ko4evneg.caloriesApp.TestingData.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+@ContextConfiguration("classpath:spring/spring-app.xml")
+@RunWith(SpringJUnit4ClassRunner.class)
 public class InMemoryMealControllerTest {
-    private static final Logger log = LoggerFactory.getLogger(InMemoryMealControllerTest.class);
-
-    private static ConfigurableApplicationContext appCtx;
-    private static MealController controller;
-    private static InMemoryMealRepository repository;
-
-    @BeforeClass
-    public static void beforeClass() {
-        appCtx = new ClassPathXmlApplicationContext("spring/spring-app.xml");
-        log.info("\n{}\n", Arrays.toString(appCtx.getBeanDefinitionNames()));
-        controller = appCtx.getBean(MealController.class);
-        repository = appCtx.getBean(InMemoryMealRepository.class);
-    }
-
-    @AfterClass
-    public static void afterClass() {
-        appCtx.close();
-    }
+    @Autowired
+    private MealController controller;
+    @Autowired
+    private InMemoryMealRepository repository;
 
     @Before
     public void setUp() {
