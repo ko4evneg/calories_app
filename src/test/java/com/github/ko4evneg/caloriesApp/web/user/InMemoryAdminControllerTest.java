@@ -2,11 +2,8 @@ package com.github.ko4evneg.caloriesApp.web.user;
 
 import com.github.ko4evneg.caloriesApp.model.Role;
 import com.github.ko4evneg.caloriesApp.model.User;
-import lombok.NoArgsConstructor;
 import org.junit.*;
 import org.junit.runner.RunWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.github.ko4evneg.caloriesApp.repository.inmemory.InMemoryUserRepository;
 import com.github.ko4evneg.caloriesApp.util.exception.NotFoundException;
