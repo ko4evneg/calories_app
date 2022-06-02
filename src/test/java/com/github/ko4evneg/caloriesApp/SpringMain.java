@@ -1,22 +1,22 @@
 package com.github.ko4evneg.caloriesApp;
 
-import com.github.ko4evneg.caloriesApp.web.meal.MealController;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import java.time.LocalDate;
-import java.time.Month;
+import javax.sql.DataSource;
+import java.sql.*;
 
 public class SpringMain {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
         try (ConfigurableApplicationContext appCtx = new ClassPathXmlApplicationContext("spring/spring-app.xml")) {
-            MealController mealController = appCtx.getBean(MealController.class);
+            DataSource ds = appCtx.getBean("dataSource", DataSource.class);
+            Connection connection = ds.getConnection();
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM USERS");
+            ResultSet resultSet = statement.executeQuery();
 
-            System.out.println(mealController.getBetween(
-                    LocalDate.of(2022, Month.APRIL, 29),
-                    null,
-                    LocalDate.of(2022, Month.APRIL, 29),
-                    null));
+            while (resultSet.next()) {
+                System.out.println(resultSet.getString("email"));
+            }
         }
     }
 
