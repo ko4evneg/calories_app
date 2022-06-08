@@ -2,11 +2,13 @@ package com.github.ko4evneg.caloriesApp.web.user;
 
 import com.github.ko4evneg.caloriesApp.model.Role;
 import com.github.ko4evneg.caloriesApp.model.User;
+import com.github.ko4evneg.caloriesApp.repository.UserRepository;
 import org.junit.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.github.ko4evneg.caloriesApp.repository.inmemory.InMemoryUserRepository;
 import com.github.ko4evneg.caloriesApp.util.exception.NotFoundException;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -22,11 +24,14 @@ public class InMemoryAdminControllerTest {
     @Autowired
     private AdminController controller;
     @Autowired
-    private InMemoryUserRepository repository;
+    @Qualifier("inMemoryUserRepository")
+    private UserRepository repository;
 
     @Before
     public void setUp() {
-        repository.init();
+        if (repository instanceof InMemoryUserRepository) {
+            ((InMemoryUserRepository) repository).init();
+        }
     }
 
     @Test

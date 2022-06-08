@@ -6,6 +6,7 @@ import com.github.ko4evneg.caloriesApp.util.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,6 +15,12 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+
+    @PostConstruct
+    void ooinit(){
+        System.out.println("init URep");
+        System.out.println(userRepository);
+    }
 
     @Override
     public User get(Integer userId) {

@@ -4,6 +4,7 @@ import com.github.ko4evneg.caloriesApp.model.Meal;
 import com.github.ko4evneg.caloriesApp.repository.MealRepository;
 import com.github.ko4evneg.caloriesApp.util.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
