@@ -1,9 +1,12 @@
-package com.github.ko4evneg.caloriesApp.repository;
+package com.github.ko4evneg.caloriesApp.repository.jdbc;
 
 import com.github.ko4evneg.caloriesApp.model.User;
+import com.github.ko4evneg.caloriesApp.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Profile;
+import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -13,9 +16,9 @@ import org.springframework.stereotype.Repository;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
-import java.util.Optional;
 
 @Repository
+@Profile("jdbc")
 @RequiredArgsConstructor
 public class JdbcUserRepository implements UserRepository {
     private static final Logger log = LoggerFactory.getLogger(JdbcUserRepository.class);
@@ -26,7 +29,7 @@ public class JdbcUserRepository implements UserRepository {
     private SimpleJdbcInsert jdbcInsert;
 
     @PostConstruct
-    private void initRepository(){
+    private void initRepository() {
         jdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
                 .withTableName("users")
                 .usingGeneratedKeyColumns("id");
@@ -48,7 +51,6 @@ public class JdbcUserRepository implements UserRepository {
 
             Number newId = jdbcInsert.executeAndReturnKey(userProperties);
             user.setId(newId.intValue());
-
             return user;
         } else {
             log.debug("jdbc edit user {}", user);
@@ -62,7 +64,6 @@ public class JdbcUserRepository implements UserRepository {
                     enabled = :enabled,
                     calories_per_day = :caloriesPerDay
                     WHERE id = :id""", userProperties);
-
             return userRowUpdated == 0 ? null : user;
         }
     }
@@ -74,15 +75,15 @@ public class JdbcUserRepository implements UserRepository {
     }
 
     @Override
-    public Optional<User> get(Integer id) {
+    public User get(Integer id) {
         log.debug("jdbc get user {}", id);
-        return Optional.ofNullable(jdbcTemplate.queryForObject("SELECT * FROM USERS WHERE ID = ?", USER_MAPPER, id));
+        return DataAccessUtils.singleResult(jdbcTemplate.query("SELECT * FROM USERS WHERE ID = ?", USER_MAPPER, id));
     }
 
     @Override
-    public Optional<User> getByEmail(String email) {
+    public User getByEmail(String email) {
         log.debug("jdbc get user by email {}", email);
-        return Optional.ofNullable(jdbcTemplate.queryForObject("SELECT * FROM USERS WHERE email = ?", USER_MAPPER, email));
+        return DataAccessUtils.singleResult(jdbcTemplate.query("SELECT * FROM USERS WHERE email = ?", USER_MAPPER, email));
     }
 
     @Override
