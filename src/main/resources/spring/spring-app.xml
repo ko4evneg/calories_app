@@ -11,4 +11,6 @@
 
     <context:component-scan base-package="com.github.ko4evneg.caloriesApp.**.web"/>
 
+    <context:component-scan base-package="com.github.ko4evneg.caloriesApp.**.util"/>
+
 </beans>

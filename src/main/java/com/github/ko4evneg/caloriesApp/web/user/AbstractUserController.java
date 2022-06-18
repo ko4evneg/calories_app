@@ -17,35 +17,35 @@ public abstract class AbstractUserController {
     @Autowired
     private UserService userService;
 
-    public List<User> getAll() {
-        log.debug("getAll");
-        return userService.getAll();
-    }
-
     public User get(int id) {
-        log.debug("get {}", id);
+        log.debug("controller: get {}", id);
         return userService.get(id);
     }
 
+    public List<User> getAll() {
+        log.debug("controller: getAll");
+        return userService.getAll();
+    }
+
     public User create(User user) {
-        log.debug("create {}", user);
+        log.debug("controller: create {}", user);
         checkNew(user);
         return userService.save(user);
     }
 
     public void delete(int id) {
-        log.debug("delete {}", id);
+        log.debug("controller: delete {}", id);
         userService.delete(id);
     }
 
     public void update(User user, int id) {
-        log.debug("update {} with id={}", user, id);
+        log.debug("controller: update {} with id={}", user, id);
         assureIdConsistent(user, id);
         userService.save(user);
     }
 
     public User getByMail(String email) {
-        log.debug("getByEmail {}", email);
+        log.debug("controller: getByEmail {}", email);
         return userService.getByEmail(email);
     }
 }

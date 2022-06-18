@@ -4,12 +4,13 @@ import com.github.ko4evneg.caloriesApp.model.Role;
 import com.github.ko4evneg.caloriesApp.model.User;
 import com.github.ko4evneg.caloriesApp.repository.UserRepository;
 import com.github.ko4evneg.caloriesApp.repository.inmemory.InMemoryUserRepository;
+import com.github.ko4evneg.caloriesApp.util.UserAssertionsHelper;
 import com.github.ko4evneg.caloriesApp.util.exception.NotFoundException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -17,17 +18,19 @@ import java.util.EnumSet;
 import java.util.List;
 
 import static com.github.ko4evneg.caloriesApp.TestingData.*;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 @ContextConfiguration("classpath:spring/spring-app.xml")
 @RunWith(SpringJUnit4ClassRunner.class)
+@ActiveProfiles("inMemory")
 public class InMemoryUserControllerTest {
     @Autowired
     private ProfileController controller;
     @Autowired
-    @Qualifier("inMemoryUserRepository")
     private UserRepository repository;
+    @Autowired
+    private UserAssertionsHelper assertionsHelper;
 
     @Before
     public void setUp() {
@@ -39,7 +42,7 @@ public class InMemoryUserControllerTest {
     @Test
     public void deleteExisting() {
         controller.delete(USER_ID);
-        assertTrue(repository.get(USER_ID).isEmpty());
+        assertNull(repository.get(USER_ID));
     }
 
     @Test(expected = NotFoundException.class)
@@ -50,7 +53,7 @@ public class InMemoryUserControllerTest {
     @Test
     public void getExisting() {
         User actualUser = controller.get(USER_ID);
-        assertEquals(user, actualUser);
+        assertionsHelper.assertRecursiveEquals(actualUser, user);
     }
 
     @Test(expected = NotFoundException.class)
@@ -61,20 +64,20 @@ public class InMemoryUserControllerTest {
     @Test
     public void getByMailExisting() {
         User actualUser = controller.getByMail(user.getEmail());
-        assertEquals(user, actualUser);
+        assertionsHelper.assertRecursiveEquals(actualUser, user);
     }
 
     @Test(expected = NotFoundException.class)
     public void getByMailNotFound() {
         User actualUser = controller.getByMail("random@email.com");
-        assertEquals(user, actualUser);
+        assertionsHelper.assertRecursiveEquals(actualUser, user);
     }
 
 
     @Test
     public void getAllFilled() {
         List<User> actualUsers = controller.getAll();
-        assertEquals(List.of(admin, user), actualUsers);
+        assertionsHelper.assertAllRecursiveEquals(actualUsers, List.of(admin, user));
     }
 
     @Test
@@ -85,7 +88,7 @@ public class InMemoryUserControllerTest {
         assertTrue(actualUserDelete);
 
         List<User> actualUsers = controller.getAll();
-        assertEquals(List.of(), actualUsers);
+        assertionsHelper.assertAllRecursiveEquals(actualUsers, List.of());
     }
 
     @Test
@@ -95,9 +98,8 @@ public class InMemoryUserControllerTest {
 
         User createdUser = controller.create(user);
         User actualUser = controller.get(NEW_USER_ID);
-
-        assertEquals(expectedUser, createdUser);
-        assertEquals(expectedUser, actualUser);
+        assertionsHelper.assertRecursiveEquals(createdUser, expectedUser);
+        assertionsHelper.assertRecursiveEquals(actualUser, expectedUser);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -113,7 +115,7 @@ public class InMemoryUserControllerTest {
 
         User actualUser = controller.get(USER_ID);
 
-        assertEquals(user, actualUser);
+        assertionsHelper.assertRecursiveEquals(actualUser, user);
     }
 
     @Test(expected = IllegalArgumentException.class)

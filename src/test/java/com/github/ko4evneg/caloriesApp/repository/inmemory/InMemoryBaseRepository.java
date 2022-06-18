@@ -8,10 +8,13 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static com.github.ko4evneg.caloriesApp.TestingData.ADMIN_ID;
+import static com.github.ko4evneg.caloriesApp.TestingData.USER_ID;
+
 public abstract class InMemoryBaseRepository<T extends AbstractBaseEntity> {
     protected static final Logger log = LoggerFactory.getLogger(InMemoryUserRepository.class);
 
-    protected static final AtomicInteger idCounter = new AtomicInteger(100000);
+    protected static final AtomicInteger idCounter = new AtomicInteger(USER_ID);
     protected final Map<Integer, T> repository;
 
     public InMemoryBaseRepository() {
@@ -20,6 +23,6 @@ public abstract class InMemoryBaseRepository<T extends AbstractBaseEntity> {
 
     public void init() {
         repository.clear();
-        idCounter.set(100000);
+        idCounter.set(ADMIN_ID + 1);
     }
 }
