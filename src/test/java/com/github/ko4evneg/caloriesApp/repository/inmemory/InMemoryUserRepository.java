@@ -30,13 +30,13 @@ public class InMemoryUserRepository extends InMemoryBaseRepository<User> impleme
 
     @Override
     public User get(Integer id) {
-        log.debug("inMem: get {}", id);
+        log.debug("inMemUser: get {}", id);
         return repository.get(id);
     }
 
     @Override
     public User getByEmail(String email) {
-        log.debug("inMem: getByEmail {}", email);
+        log.debug("inMemUser: getByEmail {}", email);
         return repository.values()
                 .stream()
                 .filter(user -> user.getEmail().equals(email))
@@ -45,7 +45,7 @@ public class InMemoryUserRepository extends InMemoryBaseRepository<User> impleme
 
     @Override
     public List<User> getAll() {
-        log.debug("inMem: getAll");
+        log.debug("inMemUser: getAll");
         return repository.values()
                 .stream()
                 .toList();
@@ -54,19 +54,19 @@ public class InMemoryUserRepository extends InMemoryBaseRepository<User> impleme
     @Override
     public User save(User user) {
         if (user.isNew()) {
-            log.debug("inMem: save new {}", user);
+            log.debug("inMemUser: save new {}", user);
             int newId = idCounter.getAndIncrement();
             user.setId(newId);
             repository.put(newId, user);
             return user;
         }
-        log.debug("inMem: edit {}", user);
+        log.debug("inMemUser: edit {}", user);
         return repository.computeIfPresent(user.getId(), (id, oldUser) -> user);
     }
 
     @Override
     public boolean delete(Integer id) {
-        log.debug("inMem: delete {}", id);
+        log.debug("inMemUser: delete {}", id);
         return repository.remove(id) != null;
     }
 }

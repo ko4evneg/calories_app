@@ -3,12 +3,13 @@ package com.github.ko4evneg.caloriesApp.web.user;
 import com.github.ko4evneg.caloriesApp.model.Role;
 import com.github.ko4evneg.caloriesApp.model.User;
 import com.github.ko4evneg.caloriesApp.repository.UserRepository;
+import com.github.ko4evneg.caloriesApp.util.UserAssertionsHelper;
 import org.junit.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.github.ko4evneg.caloriesApp.repository.inmemory.InMemoryUserRepository;
 import com.github.ko4evneg.caloriesApp.util.exception.NotFoundException;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -20,12 +21,14 @@ import static org.junit.Assert.*;
 
 @ContextConfiguration("classpath:spring/spring-app.xml")
 @RunWith(SpringJUnit4ClassRunner.class)
+@ActiveProfiles("inMemory")
 public class InMemoryAdminControllerTest {
     @Autowired
     private AdminController controller;
     @Autowired
-    @Qualifier("inMemoryUserRepository")
     private UserRepository repository;
+    @Autowired
+    private UserAssertionsHelper assertionsHelper;
 
     @Before
     public void setUp() {
@@ -37,7 +40,7 @@ public class InMemoryAdminControllerTest {
     @Test
     public void deleteExisting() {
         controller.delete(ADMIN_ID);
-        assertTrue(repository.get(ADMIN_ID).isEmpty());
+        assertNull(repository.get(ADMIN_ID));
     }
 
     @Test(expected = NotFoundException.class)
@@ -48,7 +51,7 @@ public class InMemoryAdminControllerTest {
     @Test
     public void getExisting() {
         User actualAdmin = controller.get(ADMIN_ID);
-        assertEquals(admin, actualAdmin);
+        assertionsHelper.assertRecursiveEquals(actualAdmin, admin);
     }
 
     @Test(expected = NotFoundException.class)
@@ -59,20 +62,20 @@ public class InMemoryAdminControllerTest {
     @Test
     public void getByMailExisting() {
         User actualAdmin = controller.getByMail(admin.getEmail());
-        assertEquals(admin, actualAdmin);
+        assertionsHelper.assertRecursiveEquals(actualAdmin, admin);
     }
 
     @Test(expected = NotFoundException.class)
     public void getByMailNotFound() {
         User actualAdmin = controller.getByMail("random@email.com");
-        assertEquals(admin, actualAdmin);
+        assertionsHelper.assertRecursiveEquals(actualAdmin, admin);
     }
 
 
     @Test
     public void getAllFilled() {
         List<User> actualUsers = controller.getAll();
-        assertEquals(List.of(admin, user), actualUsers);
+        assertionsHelper.assertAllRecursiveEquals(actualUsers, List.of(admin, user));
     }
 
     @Test
@@ -83,7 +86,7 @@ public class InMemoryAdminControllerTest {
         assertTrue(actualUserDelete);
 
         List<User> actualUsers = controller.getAll();
-        assertEquals(List.of(), actualUsers);
+        assertionsHelper.assertAllRecursiveEquals(actualUsers, List.of());
     }
 
     @Test
@@ -94,8 +97,8 @@ public class InMemoryAdminControllerTest {
         User createdAdminUser = controller.create(adminUser);
         User actualAdminUser = controller.get(NEW_USER_ID);
 
-        assertEquals(expectedAdminUser, createdAdminUser);
-        assertEquals(expectedAdminUser, actualAdminUser);
+        assertionsHelper.assertRecursiveEquals(createdAdminUser, expectedAdminUser);
+        assertionsHelper.assertRecursiveEquals(actualAdminUser, expectedAdminUser);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -111,7 +114,7 @@ public class InMemoryAdminControllerTest {
 
         User actualAdminUser = controller.get(ADMIN_ID);
 
-        assertEquals(adminUser, actualAdminUser);
+        assertionsHelper.assertRecursiveEquals(actualAdminUser, adminUser);
     }
 
     @Test(expected = IllegalArgumentException.class)
