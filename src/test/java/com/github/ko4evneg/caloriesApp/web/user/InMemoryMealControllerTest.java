@@ -6,22 +6,26 @@ import com.github.ko4evneg.caloriesApp.to.MealTo;
 import com.github.ko4evneg.caloriesApp.util.MealsUtil;
 import com.github.ko4evneg.caloriesApp.util.exception.NotFoundException;
 import com.github.ko4evneg.caloriesApp.web.meal.MealController;
+import org.checkerframework.framework.qual.QualifierArgument;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 
 import static com.github.ko4evneg.caloriesApp.TestingData.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 @ContextConfiguration("classpath:spring/spring-app.xml")
 @RunWith(SpringJUnit4ClassRunner.class)
+@ActiveProfiles("inMemory")
 public class InMemoryMealControllerTest {
     @Autowired
     private MealController controller;
@@ -33,12 +37,11 @@ public class InMemoryMealControllerTest {
         repository.init();
     }
 
-    //TODO: add auth to all methods
-
     @Test
     public void deleteExisting() {
+        assertNotNull(repository.get(MEAL_USER_ONE_ID, USER_ID));
         controller.delete(MEAL_USER_ONE_ID);
-        assertTrue(repository.get(MEAL_USER_ONE_ID, USER_ID).isEmpty());
+        assertNull(repository.get(MEAL_USER_ONE_ID, USER_ID));
     }
 
     @Test(expected = NotFoundException.class)
@@ -48,9 +51,9 @@ public class InMemoryMealControllerTest {
 
     @Test(expected = NotFoundException.class)
     public void deleteWrongUser() {
-        assertTrue(repository.get(MEAL_USER_TWO_ID, ADMIN_ID).isPresent());
+        assertNotNull(repository.get(MEAL_USER_TWO_ID, ADMIN_ID));
         controller.delete(MEAL_USER_TWO_ID);
-        assertTrue(repository.get(MEAL_USER_TWO_ID, ADMIN_ID).isPresent());
+        assertNotNull((repository.get(MEAL_USER_TWO_ID, ADMIN_ID)));
     }
 
     @Test
@@ -78,7 +81,7 @@ public class InMemoryMealControllerTest {
     private List<MealTo> getExpectedUserOneMeals() {
         return MealsUtil.getTos(meals.stream()
                 .filter(m -> m.getUserId().equals(USER_ID))
-                .sorted((o1, o2) -> o2.getDateTime().compareTo(o1.getDateTime()))
+                .sorted(Comparator.comparing(Meal::getDateTime).reversed())
                 .toList(), MealsUtil.DEFAULT_CALORIES_PER_DAY);
     }
 
@@ -88,7 +91,7 @@ public class InMemoryMealControllerTest {
         Meal meal = new Meal(null, LocalDateTime.of(2022, 10, 3, 15, 21), "la meal", 507, USER_ID);
 
         MealTo createdMeal = controller.save(meal);
-        MealTo actualMeal = controller.get(NEW_MEAL_ID);
+        MealTo actualMeal = MealsUtil.mapFromMeal(repository.get(NEW_MEAL_ID, USER_ID));
 
         assertEquals(expectedMeal, createdMeal);
         assertEquals(expectedMeal, actualMeal);

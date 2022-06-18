@@ -5,7 +5,7 @@ import static com.github.ko4evneg.caloriesApp.util.MealsUtil.DEFAULT_CALORIES_PE
 public class SecurityUtil {
     //TODO: remove stub
     public static int authUserId() {
-        return 1;
+        return 100000;
     }
 
     public static int authUserCaloriesPerDay() {

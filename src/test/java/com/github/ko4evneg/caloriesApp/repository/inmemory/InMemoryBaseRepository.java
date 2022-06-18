@@ -8,7 +8,6 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static com.github.ko4evneg.caloriesApp.TestingData.ADMIN_ID;
 import static com.github.ko4evneg.caloriesApp.TestingData.USER_ID;
 
 public abstract class InMemoryBaseRepository<T extends AbstractBaseEntity> {
@@ -23,6 +22,6 @@ public abstract class InMemoryBaseRepository<T extends AbstractBaseEntity> {
 
     public void init() {
         repository.clear();
-        idCounter.set(ADMIN_ID + 1);
+        idCounter.set(USER_ID);
     }
 }
