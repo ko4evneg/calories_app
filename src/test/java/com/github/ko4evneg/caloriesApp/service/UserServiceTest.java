@@ -8,6 +8,7 @@ import com.github.ko4evneg.caloriesApp.util.exception.NotFoundException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
@@ -39,6 +40,14 @@ public class UserServiceTest {
     public void getByEmail() {
         User actualUser = userService.getByEmail(admin.getEmail());
         assertionsHelper.assertRecursiveEquals(actualUser, admin);
+    }
+
+    @Test(expected = DataAccessException.class)
+    public void duplicateMailCreate() {
+        User actualUser = userService.getByEmail(admin.getEmail());
+        actualUser.setId(null);
+        User duplicateEmailUser = new User(actualUser);
+        userService.save(duplicateEmailUser);
     }
 
     @Test
