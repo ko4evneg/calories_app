@@ -14,4 +14,10 @@
             <sqlFile path="db/rollback/init_1.sql"/>
         </rollback>
     </changeSet>
+    <changeSet id="init-db-2" author="ko4evneg">
+        <sqlFile path="db/changes/init_2.sql"/>
+        <rollback>
+            <sqlFile path="db/rollback/init_2.sql"/>
+        </rollback>
+    </changeSet>
 </databaseChangeLog>
