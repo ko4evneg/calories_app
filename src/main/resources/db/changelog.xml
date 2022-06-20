@@ -8,16 +8,10 @@
     <changeSet id="init-liquibase" author="ko4evneg">
         <tagDatabase tag="init"/>
     </changeSet>
-    <changeSet id="init-db" author="ko4evneg">
-        <sqlFile path="db/init.sql"/>
+    <changeSet id="init-db-1" author="ko4evneg">
+        <sqlFile path="db/changes/init_1.sql"/>
         <rollback>
-            <sqlFile path="db/rollback/init.sql"/>
+            <sqlFile path="db/rollback/init_1.sql"/>
         </rollback>
     </changeSet>
-<!--    <changeSet id="rollback:init-db" author="ko4evneg">-->
-<!--        <rollback changeSetId="init-db">-->
-<!--            <sqlFile path="db/rollback/init.sql"/>-->
-<!--        </rollback>-->
-<!--    </changeSet>-->
-
 </databaseChangeLog>
