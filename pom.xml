@@ -17,6 +17,7 @@
         <spring.version>5.3.19</spring.version>
         <junit.version>4.13.2</junit.version>
         <postgres.version>42.3.6</postgres.version>
+        <liquibase.version>4.12.0</liquibase.version>
     </properties>
 
     <dependencies>
@@ -83,6 +84,11 @@
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <version>${postgres.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-core</artifactId>
+            <version>${liquibase.version}</version>
         </dependency>
 
         <!-- UTILS -->
