@@ -1,6 +1,7 @@
 package com.github.ko4evneg.caloriesApp.service;
 
 import com.github.ko4evneg.caloriesApp.model.Meal;
+import com.github.ko4evneg.caloriesApp.util.MealAssertionsHelper;
 import com.github.ko4evneg.caloriesApp.util.exception.NotFoundException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,7 +19,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.github.ko4evneg.caloriesApp.TestingData.*;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 @ContextConfiguration("classpath:spring/spring-app.xml")
@@ -29,11 +29,13 @@ public class MealServiceTest {
 
     @Autowired
     private MealService mealService;
+    @Autowired
+    private MealAssertionsHelper assertionsHelper;
 
     @Test
     public void get() {
         Meal actualMeal = mealService.get(USERS_MEAL_ID, USER_ID);
-        assertEquals(singleMeal, actualMeal);
+        assertionsHelper.assertRecursiveEquals(actualMeal, singleMeal);
     }
 
     @Test(expected = NotFoundException.class)
@@ -50,7 +52,7 @@ public class MealServiceTest {
     public void getAll() {
         List<Meal> actualMeals = mealService.getAll(USER_ID);
         List<Meal> expectedMeals = getUserOneSortedMeals();
-        assertEquals(expectedMeals, actualMeals);
+        assertionsHelper.assertAllRecursiveEquals(actualMeals, expectedMeals);
     }
 
     private List<Meal> getUserOneSortedMeals() {
@@ -71,7 +73,7 @@ public class MealServiceTest {
 
         List<Meal> actualMeals = mealService.getBetweenInclusive(startDateTime, endDateTime, USER_ID);
 
-        assertEquals(expectedMeals, actualMeals);
+        assertionsHelper.assertAllRecursiveEquals(actualMeals, expectedMeals);
     }
 
     @Test
@@ -80,7 +82,7 @@ public class MealServiceTest {
         mealService.save(expectedMeal, ADMIN_ID);
 
         Meal actualMeal = mealService.get(NEW_MEAL_ID, ADMIN_ID);
-        assertEquals(expectedMeal, actualMeal);
+        assertionsHelper.assertRecursiveEquals(actualMeal, expectedMeal);
     }
 
     @Test(expected = NotFoundException.class)
@@ -95,7 +97,7 @@ public class MealServiceTest {
         mealService.save(expectedMeal, ADMIN_ID);
 
         Meal actualMeal = mealService.get(ADMINS_MEAL_ID, ADMIN_ID);
-        assertEquals(expectedMeal, actualMeal);
+        assertionsHelper.assertRecursiveEquals(actualMeal, expectedMeal);
     }
 
     @Test(expected = NotFoundException.class)
@@ -111,7 +113,7 @@ public class MealServiceTest {
         List<Meal> expectedMeals = getUserOneSortedMeals();
         expectedMeals.remove(singleMeal);
 
-        assertEquals(expectedMeals, mealService.getAll(USER_ID));
+        assertionsHelper.assertAllRecursiveEquals(mealService.getAll(USER_ID), expectedMeals);
     }
 
     @Test(expected = NotFoundException.class)
