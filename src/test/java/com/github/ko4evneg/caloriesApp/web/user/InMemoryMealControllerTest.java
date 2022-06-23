@@ -6,12 +6,10 @@ import com.github.ko4evneg.caloriesApp.to.MealTo;
 import com.github.ko4evneg.caloriesApp.util.MealsUtil;
 import com.github.ko4evneg.caloriesApp.util.exception.NotFoundException;
 import com.github.ko4evneg.caloriesApp.web.meal.MealController;
-import org.checkerframework.framework.qual.QualifierArgument;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -39,9 +37,9 @@ public class InMemoryMealControllerTest {
 
     @Test
     public void deleteExisting() {
-        assertNotNull(repository.get(MEAL_USER_ONE_ID, USER_ID));
-        controller.delete(MEAL_USER_ONE_ID);
-        assertNull(repository.get(MEAL_USER_ONE_ID, USER_ID));
+        assertNotNull(repository.get(USERS_MEAL_ID, USER_ID));
+        controller.delete(USERS_MEAL_ID);
+        assertNull(repository.get(USERS_MEAL_ID, USER_ID));
     }
 
     @Test(expected = NotFoundException.class)
@@ -51,20 +49,20 @@ public class InMemoryMealControllerTest {
 
     @Test(expected = NotFoundException.class)
     public void deleteWrongUser() {
-        assertNotNull(repository.get(MEAL_USER_TWO_ID, ADMIN_ID));
-        controller.delete(MEAL_USER_TWO_ID);
-        assertNotNull((repository.get(MEAL_USER_TWO_ID, ADMIN_ID)));
+        assertNotNull(repository.get(ADMINS_MEAL_ID, ADMIN_ID));
+        controller.delete(ADMINS_MEAL_ID);
+        assertNotNull((repository.get(ADMINS_MEAL_ID, ADMIN_ID)));
     }
 
     @Test
     public void getExisting() {
-        MealTo actualMeal = controller.get(MEAL_USER_ONE_ID);
+        MealTo actualMeal = controller.get(USERS_MEAL_ID);
         assertEquals(MealsUtil.mapFromMeal(singleMeal), actualMeal);
     }
 
     @Test(expected = NotFoundException.class)
     public void getWrongUser() {
-        controller.get(MEAL_USER_TWO_ID);
+        controller.get(ADMINS_MEAL_ID);
     }
 
     @Test(expected = NotFoundException.class)
@@ -99,13 +97,13 @@ public class InMemoryMealControllerTest {
 
     @Test(expected = NotFoundException.class)
     public void createOrEditAlienFail() {
-        Meal meal = new Meal(MEAL_USER_TWO_ID, LocalDateTime.of(2022, 10, 3, 15, 21), "la meal", 507, USER_ID);
+        Meal meal = new Meal(ADMINS_MEAL_ID, LocalDateTime.of(2022, 10, 3, 15, 21), "la meal", 507, USER_ID);
         controller.save(meal);
     }
 
     @Test
     public void editSelf() {
-        Meal meal = new Meal(MEAL_USER_ONE_ID, LocalDateTime.of(2022, 10, 3, 15, 21), "la meal", 507, USER_ID);
+        Meal meal = new Meal(USERS_MEAL_ID, LocalDateTime.of(2022, 10, 3, 15, 21), "la meal", 507, USER_ID);
         controller.save(meal);
         assertEquals(MealsUtil.mapFromMeal(meal), controller.get(meal.getId()));
     }

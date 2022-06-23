@@ -35,7 +35,10 @@ public class MealServiceImpl implements MealService {
 
     @Override
     public List<Meal> getBetweenInclusive(LocalDateTime startDateTime, LocalDateTime endDateTime, int userId) {
-        return mealRepository.getBetweenHalfOpen(startDateTime, endDateTime, userId);
+        return mealRepository.getBetweenHalfOpen(startDateTime, endDateTime, userId)
+                .stream()
+                .sorted(Comparator.comparing(Meal::getDateTime).reversed())
+                .toList();
     }
 
     @Override

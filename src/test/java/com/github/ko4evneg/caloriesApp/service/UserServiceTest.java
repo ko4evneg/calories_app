@@ -66,7 +66,7 @@ public class UserServiceTest {
     public void save() {
         User expectedUser = new User("usor", "u@s.r", "123", Role.USER);
         userService.save(expectedUser);
-        User actualUser = userService.get(ADMIN_ID + 1);
+        User actualUser = userService.get(USERS_MEAL_ID + 9);
         assertionsHelper.assertRecursiveEquals(actualUser, expectedUser);
     }
 }
