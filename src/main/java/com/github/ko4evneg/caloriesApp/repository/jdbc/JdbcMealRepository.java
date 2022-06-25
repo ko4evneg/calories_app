@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
@@ -70,12 +71,7 @@ public class JdbcMealRepository implements MealRepository {
 
     @Override
     public Meal save(Meal meal, Integer userId) {
-        MapSqlParameterSource mealProperties = new MapSqlParameterSource()
-                .addValue("id", meal.getId())
-                .addValue("description", meal.getDescription())
-                .addValue("calories", meal.getCalories())
-                .addValue("dateTime", meal.getDateTime())
-                .addValue("userId", meal.getUserId());
+        BeanPropertySqlParameterSource mealProperties = new BeanPropertySqlParameterSource(meal);
 
         if (meal.isNew()) {
             log.debug("jdbcMeal: save {}", meal);
