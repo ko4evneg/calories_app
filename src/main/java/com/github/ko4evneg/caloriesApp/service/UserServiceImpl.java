@@ -19,16 +19,18 @@ public class UserServiceImpl implements UserService {
     @Override
     public User get(Integer userId) {
         User user = userRepository.get(userId);
-        if (user == null)
+        if (user == null) {
             throw new NotFoundException("Not found entity with id " + userId);
+        }
         return user;
     }
 
     @Override
     public User getByEmail(String email) {
         User user = userRepository.getByEmail(email);
-        if (user == null)
+        if (user == null) {
             throw new NotFoundException("Not found entity with email " + email);
+        }
         return user;
     }
 

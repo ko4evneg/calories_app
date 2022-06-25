@@ -20,8 +20,9 @@ public class MealServiceImpl implements MealService {
     @Override
     public Meal get(Integer mealId, Integer userId) {
         Meal meal = mealRepository.get(mealId, userId);
-        if (meal == null)
+        if (meal == null) {
             throw new NotFoundException("Not found entity with id " + mealId);
+        }
         return meal;
     }
 

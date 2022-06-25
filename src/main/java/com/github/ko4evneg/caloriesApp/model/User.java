@@ -36,6 +36,7 @@ public class User extends AbstractNamedEntity {
 
     public User(String name, String email, String password, int caloriesPerDay, boolean enabled, Role... roles) {
         this(null, name, email, password, DEFAULT_CALORIES_PER_DAY, enabled, Arrays.asList((roles)));
+        this.caloriesPerDay = caloriesPerDay;
     }
 
     public User(Integer id, String name, String email, String password, int caloriesPerDay, boolean enabled, Collection<Role> roles) {
@@ -53,6 +54,7 @@ public class User extends AbstractNamedEntity {
         this.password = user.getPassword();
         this.caloriesPerDay = user.getCaloriesPerDay();
         this.enabled = user.isEnabled();
+        this.registered = user.getRegistered();
         setRoles(user.roles);
     }
 
@@ -70,33 +72,5 @@ public class User extends AbstractNamedEntity {
                 ", roles=" + roles +
                 ", caloriesPerDay=" + caloriesPerDay +
                 '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-
-        User user = (User) o;
-
-        if (enabled != user.enabled) return false;
-        if (caloriesPerDay != user.caloriesPerDay) return false;
-        if (email != null ? !email.equals(user.email) : user.email != null) return false;
-        if (password != null ? !password.equals(user.password) : user.password != null) return false;
-        if (registered != null ? !registered.equals(user.registered) : user.registered != null) return false;
-        return roles != null ? roles.equals(user.roles) : user.roles == null;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + (email != null ? email.hashCode() : 0);
-        result = 31 * result + (password != null ? password.hashCode() : 0);
-        result = 31 * result + (enabled ? 1 : 0);
-        result = 31 * result + (registered != null ? registered.hashCode() : 0);
-        result = 31 * result + (roles != null ? roles.hashCode() : 0);
-        result = 31 * result + caloriesPerDay;
-        return result;
     }
 }
