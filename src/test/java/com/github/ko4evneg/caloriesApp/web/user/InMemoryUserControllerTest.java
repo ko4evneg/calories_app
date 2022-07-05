@@ -21,7 +21,7 @@ import static com.github.ko4evneg.caloriesApp.TestingData.*;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-@ContextConfiguration("classpath:spring/spring-app.xml")
+@ContextConfiguration({"classpath:spring/spring-app.xml", "classpath:db/inmemory-db.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)
 @ActiveProfiles("inMemory")
 public class InMemoryUserControllerTest {

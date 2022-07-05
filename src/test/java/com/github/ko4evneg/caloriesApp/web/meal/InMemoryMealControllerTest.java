@@ -1,11 +1,11 @@
-package com.github.ko4evneg.caloriesApp.web.user;
+package com.github.ko4evneg.caloriesApp.web.meal;
 
 import com.github.ko4evneg.caloriesApp.model.Meal;
+import com.github.ko4evneg.caloriesApp.repository.MealRepository;
 import com.github.ko4evneg.caloriesApp.repository.inmemory.InMemoryMealRepository;
 import com.github.ko4evneg.caloriesApp.to.MealTo;
 import com.github.ko4evneg.caloriesApp.util.MealsUtil;
 import com.github.ko4evneg.caloriesApp.util.exception.NotFoundException;
-import com.github.ko4evneg.caloriesApp.web.meal.MealController;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,18 +21,20 @@ import java.util.List;
 import static com.github.ko4evneg.caloriesApp.TestingData.*;
 import static org.junit.Assert.*;
 
-@ContextConfiguration("classpath:spring/spring-app.xml")
+@ContextConfiguration({"classpath:spring/spring-app.xml", "classpath:db/inmemory-db.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)
 @ActiveProfiles("inMemory")
 public class InMemoryMealControllerTest {
     @Autowired
     private MealController controller;
     @Autowired
-    private InMemoryMealRepository repository;
+    private MealRepository repository;
 
     @Before
     public void setUp() {
-        repository.init();
+        if (repository instanceof InMemoryMealRepository) {
+            ((InMemoryMealRepository) repository).init();
+        }
     }
 
     @Test

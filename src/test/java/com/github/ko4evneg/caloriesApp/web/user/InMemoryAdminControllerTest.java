@@ -3,12 +3,13 @@ package com.github.ko4evneg.caloriesApp.web.user;
 import com.github.ko4evneg.caloriesApp.model.Role;
 import com.github.ko4evneg.caloriesApp.model.User;
 import com.github.ko4evneg.caloriesApp.repository.UserRepository;
+import com.github.ko4evneg.caloriesApp.repository.inmemory.InMemoryUserRepository;
 import com.github.ko4evneg.caloriesApp.util.UserAssertionsHelper;
-import org.junit.*;
+import com.github.ko4evneg.caloriesApp.util.exception.NotFoundException;
+import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.github.ko4evneg.caloriesApp.repository.inmemory.InMemoryUserRepository;
-import com.github.ko4evneg.caloriesApp.util.exception.NotFoundException;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -17,9 +18,10 @@ import java.util.EnumSet;
 import java.util.List;
 
 import static com.github.ko4evneg.caloriesApp.TestingData.*;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
-@ContextConfiguration("classpath:spring/spring-app.xml")
+@ContextConfiguration({"classpath:spring/spring-app.xml", "classpath:db/inmemory-db.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)
 @ActiveProfiles("inMemory")
 public class InMemoryAdminControllerTest {
