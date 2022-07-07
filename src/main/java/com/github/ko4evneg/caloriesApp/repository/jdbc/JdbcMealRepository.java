@@ -9,7 +9,6 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
@@ -71,7 +70,7 @@ public class JdbcMealRepository implements MealRepository {
 
     @Override
     public Meal save(Meal meal, Integer userId) {
-        BeanPropertySqlParameterSource mealProperties = new BeanPropertySqlParameterSource(meal);
+        MapSqlParameterSource mealProperties = getMealProperties(meal);
 
         if (meal.isNew()) {
             log.debug("jdbcMeal: save {}", meal);
@@ -87,9 +86,21 @@ public class JdbcMealRepository implements MealRepository {
                 WHERE ID = :id AND USER_ID = :userId""", mealProperties) > 0 ? meal : null;
     }
 
+    private MapSqlParameterSource getMealProperties(Meal meal) {
+        MapSqlParameterSource mealProperties = new MapSqlParameterSource();
+        mealProperties.addValue("id", meal.getId());
+        mealProperties.addValue("dateTime", meal.getDateTime());
+        mealProperties.addValue("calories", meal.getCalories());
+        mealProperties.addValue("description", meal.getDescription());
+        mealProperties.addValue("user", meal.getUser());
+        mealProperties.addValue("userId", meal.getUser().getId());
+        return mealProperties;
+    }
+
     @Override
     public boolean delete(Integer id, Integer userId) {
         log.debug("jdbcMeal: delete {}", id);
         return jdbcTemplate.update("DELETE FROM MEALS WHERE ID = ? AND USER_ID = ?", id, userId) > 0;
     }
+
 }

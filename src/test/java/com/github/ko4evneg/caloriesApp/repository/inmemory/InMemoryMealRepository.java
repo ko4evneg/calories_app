@@ -2,6 +2,7 @@ package com.github.ko4evneg.caloriesApp.repository.inmemory;
 
 import com.github.ko4evneg.caloriesApp.TestingData;
 import com.github.ko4evneg.caloriesApp.model.Meal;
+import com.github.ko4evneg.caloriesApp.model.User;
 import com.github.ko4evneg.caloriesApp.repository.MealRepository;
 import com.github.ko4evneg.caloriesApp.util.Util;
 import com.github.ko4evneg.caloriesApp.util.exception.NotFoundException;
@@ -13,8 +14,7 @@ import java.time.Month;
 import java.util.*;
 import java.util.function.Predicate;
 
-import static com.github.ko4evneg.caloriesApp.TestingData.ADMIN_ID;
-import static com.github.ko4evneg.caloriesApp.TestingData.NEW_USER_ID;
+import static com.github.ko4evneg.caloriesApp.TestingData.*;
 import static com.github.ko4evneg.caloriesApp.util.ValidationUtil.checkUserHasRightsForMeal;
 
 @Repository
@@ -24,8 +24,9 @@ public class InMemoryMealRepository extends InMemoryBaseRepository<Meal> impleme
     public InMemoryMealRepository() {
         super();
         //Data for manual testing
-        save(new Meal(LocalDateTime.of(2015, Month.JUNE, 1, 14, 0), "Админ ланч", 510, ADMIN_ID), ADMIN_ID);
-        save(new Meal(LocalDateTime.of(2015, Month.JUNE, 1, 21, 0), "Админ ужин", 1500, ADMIN_ID), ADMIN_ID);
+        User adminUser = getUserWithId(ADMIN_ID);
+        save(new Meal(LocalDateTime.of(2015, Month.JUNE, 1, 14, 0), "Админ ланч", 510, adminUser), ADMIN_ID);
+        save(new Meal(LocalDateTime.of(2015, Month.JUNE, 1, 21, 0), "Админ ужин", 1500, adminUser), ADMIN_ID);
     }
 
     @Override

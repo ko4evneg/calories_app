@@ -1,6 +1,7 @@
 package com.github.ko4evneg.caloriesApp.web;
 
 import com.github.ko4evneg.caloriesApp.model.Meal;
+import com.github.ko4evneg.caloriesApp.model.User;
 import com.github.ko4evneg.caloriesApp.service.MealService;
 import com.github.ko4evneg.caloriesApp.util.DateTimeUtil;
 import com.github.ko4evneg.caloriesApp.util.MealsUtil;
@@ -48,12 +49,14 @@ public class MealServlet extends HttpServlet {
                 String description = request.getParameter("description");
                 int calories = Integer.parseInt(request.getParameter("calories"));
 
+                User user = new User();
+                user.setId(userId);
                 Meal meal = new Meal(
                         (mealId.isBlank() ? null : Integer.parseInt(mealId))
                         , datetime
                         , description
                         , calories
-                        , userId);
+                        , user);
 
                 log.debug(meal.isNew() ? "Save new {}" : "Edit meal {}", meal);
                 mealService.save(meal, userId);

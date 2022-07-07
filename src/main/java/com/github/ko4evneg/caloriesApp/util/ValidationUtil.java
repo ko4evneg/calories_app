@@ -22,6 +22,6 @@ public class ValidationUtil {
     }
 
     public static boolean checkUserHasRightsForMeal(Meal meal, Integer userId) {
-        return meal.getUserId().equals(userId);
+        return meal.getUser().getId().equals(userId);
     }
 }

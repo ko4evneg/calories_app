@@ -57,7 +57,7 @@ public class MealServiceTest {
 
     private List<Meal> getUserOneSortedMeals() {
         return meals.stream()
-                .filter(m -> m.getUserId().equals(USER_ID))
+                .filter(m -> m.getUser().getId().equals(USER_ID))
                 .sorted(Comparator.comparing(Meal::getDateTime).reversed())
                 .collect(Collectors.toList());
     }
@@ -78,7 +78,7 @@ public class MealServiceTest {
 
     @Test
     public void saveOwned() {
-        Meal expectedMeal = new Meal(LocalDateTime.of(2022, Month.JULY, 10, 19, 20, 0), "test meal", 1100, ADMIN_ID);
+        Meal expectedMeal = new Meal(LocalDateTime.of(2022, Month.JULY, 10, 19, 20, 0), "test meal", 1100, getUserWithId(ADMIN_ID));
         mealService.save(expectedMeal, ADMIN_ID);
 
         Meal actualMeal = mealService.get(NEW_MEAL_ID, ADMIN_ID);
@@ -87,13 +87,13 @@ public class MealServiceTest {
 
     @Test(expected = NotFoundException.class)
     public void createOrEditAlienFail() {
-        Meal meal = new Meal(ADMINS_MEAL_ID, LocalDateTime.of(2022, 10, 3, 15, 21), "la meal", 507, USER_ID);
+        Meal meal = new Meal(ADMINS_MEAL_ID, LocalDateTime.of(2022, 10, 3, 15, 21), "la meal", 507, getUserWithId(USER_ID));
         mealService.save(meal, USER_ID);
     }
 
     @Test
     public void editOwned() {
-        Meal expectedMeal = new Meal(ADMINS_MEAL_ID, LocalDateTime.of(2022, Month.JULY, 10, 19, 20, 0), "test meal", 1100, ADMIN_ID);
+        Meal expectedMeal = new Meal(ADMINS_MEAL_ID, LocalDateTime.of(2022, Month.JULY, 10, 19, 20, 0), "test meal", 1100, getUserWithId(ADMIN_ID));
         mealService.save(expectedMeal, ADMIN_ID);
 
         Meal actualMeal = mealService.get(ADMINS_MEAL_ID, ADMIN_ID);
@@ -102,7 +102,7 @@ public class MealServiceTest {
 
     @Test(expected = NotFoundException.class)
     public void editNotExistingFail() {
-        Meal meal = new Meal(NEW_MEAL_ID, LocalDateTime.of(2022, 10, 3, 15, 21), "la meal", 507, USER_ID);
+        Meal meal = new Meal(NEW_MEAL_ID, LocalDateTime.of(2022, 10, 3, 15, 21), "la meal", 507, getUserWithId(USER_ID));
         mealService.save(meal, USER_ID);
     }
 

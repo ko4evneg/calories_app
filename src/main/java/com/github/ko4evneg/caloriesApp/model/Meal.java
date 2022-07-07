@@ -18,18 +18,18 @@ public class Meal extends AbstractBaseEntity {
 
     private int calories;
 
-    private Integer userId;
+    private User user;
 
-    public Meal(LocalDateTime dateTime, String description, int calories, Integer userId) {
-        this(null, dateTime, description, calories, userId);
+    public Meal(LocalDateTime dateTime, String description, int calories, User user) {
+        this(null, dateTime, description, calories, user);
     }
 
-    public Meal(Integer id, LocalDateTime dateTime, String description, int calories, Integer userId) {
+    public Meal(Integer id, LocalDateTime dateTime, String description, int calories, User user) {
         super(id);
         this.dateTime = dateTime;
         this.description = description;
         this.calories = calories;
-        this.userId = userId;
+        this.user = user;
     }
 
     public LocalDate getDate() {
@@ -51,30 +51,6 @@ public class Meal extends AbstractBaseEntity {
                 ", dateTime=" + dateTime +
                 ", description='" + description + '\'' +
                 ", calories=" + calories +
-                ", userId=" + userId + '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-
-        Meal meal = (Meal) o;
-
-        if (calories != meal.calories) return false;
-        if (dateTime != null ? !dateTime.equals(meal.dateTime) : meal.dateTime != null) return false;
-        if (description != null ? !description.equals(meal.description) : meal.description != null) return false;
-        return userId != null ? userId.equals(meal.userId) : meal.userId == null;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + (dateTime != null ? dateTime.hashCode() : 0);
-        result = 31 * result + (description != null ? description.hashCode() : 0);
-        result = 31 * result + calories;
-        result = 31 * result + (userId != null ? userId.hashCode() : 0);
-        return result;
+                ", userId=" + getUser().getId() + '}';
     }
 }
