@@ -1,8 +1,12 @@
 package com.github.ko4evneg.caloriesApp.model;
 
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.util.CollectionUtils;
 
+import javax.persistence.*;
+import javax.validation.constraints.*;
 import java.util.*;
 
 import static com.github.ko4evneg.caloriesApp.util.MealsUtil.DEFAULT_CALORIES_PER_DAY;
@@ -10,20 +14,37 @@ import static com.github.ko4evneg.caloriesApp.util.MealsUtil.DEFAULT_CALORIES_PE
 @Getter
 @Setter
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = true)
+@Entity
+@Table(name = "users")
+@NamedQueries({@NamedQuery(name = "FIND_BY_EMAIL", query = "select u from User u where u.email = :email"),
+        @NamedQuery(name = "DELETE", query = "delete from User u where u.id = :id"),
+        @NamedQuery(name = "FIND_ALL", query = "select u from User u")})
 public class User extends AbstractNamedEntity {
-
+    @Email
+    @NotBlank
+    @Column(name = "email")
     private String email;
 
+    @NotBlank
+    @Length(min = 3)
+    @Column(name = "password")
     private String password;
 
+    @Column(name = "enabled")
     private boolean enabled;
 
-    private Date registered = new Date();
+    @Column(name = "registered")
+    @CreationTimestamp
+    private Date registered;
 
     @Setter(AccessLevel.NONE)
+    @Enumerated(EnumType.STRING)
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "user_roles")
+    @Column(name = "role")
     private Set<Role> roles;
 
+    @Column(name = "calories_per_day")
     private int caloriesPerDay;
 
     public User(String name, String email, String password, Role... roles) {

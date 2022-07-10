@@ -5,11 +5,17 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.*;
+
 @Getter
 @Setter
 @NoArgsConstructor
-@EqualsAndHashCode
+@MappedSuperclass
 public abstract class AbstractBaseEntity {
+    @Id
+    @GeneratedValue(generator = "global_seq", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "global_seq", sequenceName = "global_seq", allocationSize = 1)
+    @Column(name = "id")
     protected Integer id;
 
     protected AbstractBaseEntity(Integer id) {
