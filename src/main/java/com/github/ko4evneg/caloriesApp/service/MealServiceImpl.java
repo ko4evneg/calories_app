@@ -7,6 +7,7 @@ import com.github.ko4evneg.caloriesApp.repository.UserRepository;
 import com.github.ko4evneg.caloriesApp.util.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Comparator;
@@ -37,10 +38,7 @@ public class MealServiceImpl implements MealService {
         return mealRepository.getAll(userId)
                 .stream()
                 .sorted(Comparator.comparing(Meal::getDateTime).reversed())
-                .map(meal -> {
-                    meal.setUser(user);
-                    return meal;
-                })
+                .peek(meal -> meal.setUser(user))
                 .toList();
     }
 
@@ -50,14 +48,12 @@ public class MealServiceImpl implements MealService {
         return mealRepository.getBetweenHalfOpen(startDateTime, endDateTime, userId)
                 .stream()
                 .sorted(Comparator.comparing(Meal::getDateTime).reversed())
-                .map(meal -> {
-                    meal.setUser(user);
-                    return meal;
-                })
+                .peek(meal -> meal.setUser(user))
                 .toList();
     }
 
     @Override
+    @Transactional
     public Meal save(Meal meal, Integer userId) {
         User user = userRepository.get(userId);
         meal.setUser(user);
@@ -67,6 +63,7 @@ public class MealServiceImpl implements MealService {
     }
 
     @Override
+    @Transactional
     public void delete(Integer mealId, Integer userId) {
         if (!mealRepository.delete(mealId, userId)) {
             throw new NotFoundException("Not found entity with id " + mealId);

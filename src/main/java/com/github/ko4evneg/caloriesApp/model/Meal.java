@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -11,13 +12,21 @@ import java.time.LocalTime;
 @Getter
 @Setter
 @NoArgsConstructor
+@Entity
+@Table(name = "meals")
+@NamedQueries({@NamedQuery(name = "DELETE_MEAL", query = "delete from Meal m where m.id = :id and m.user.id = :userId")})
 public class Meal extends AbstractBaseEntity {
+    @Column(name = "date_time")
     private LocalDateTime dateTime;
 
+    @Column(name = "description")
     private String description;
 
+    @Column(name = "calories")
     private int calories;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
     private User user;
 
     public Meal(LocalDateTime dateTime, String description, int calories, User user) {

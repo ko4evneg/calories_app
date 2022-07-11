@@ -12,7 +12,7 @@ public class MealAssertionsHelper implements AssertionsHelper<Meal> {
     public void assertRecursiveEquals(Meal actual, Meal expected) {
         Assertions.assertThat(actual)
                 .usingRecursiveComparison()
-                .ignoringFields("user.caloriesPerDay", "user.email", "user.enabled", "user.name", "user.password", "user.registered")
+                .ignoringFields("user.caloriesPerDay", "user.email", "user.enabled", "user.name", "user.password", "user.registered", "user.roles")
                 .isEqualTo(expected);
     }
 
@@ -20,7 +20,7 @@ public class MealAssertionsHelper implements AssertionsHelper<Meal> {
     public void assertAllRecursiveEquals(Collection<Meal> actual, Collection<Meal> expected) {
         Assertions.assertThat(actual)
                 .usingRecursiveComparison()
-                .ignoringFields("user.caloriesPerDay", "user.email", "user.enabled", "user.name", "user.password", "user.registered")
+                .ignoringFields("user.caloriesPerDay", "user.email", "user.enabled", "user.name", "user.password", "user.registered", "user.roles")
                 .isEqualTo(expected);
     }
 }

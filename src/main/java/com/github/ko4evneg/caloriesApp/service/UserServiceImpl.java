@@ -5,8 +5,10 @@ import com.github.ko4evneg.caloriesApp.repository.UserRepository;
 import com.github.ko4evneg.caloriesApp.util.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,6 +48,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public User save(User user) {
         Optional<User> userOptional = Optional.ofNullable(userRepository.save(user));
         return userOptional
@@ -53,6 +56,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void delete(int userId) {
         if (!userRepository.delete(userId)) {
             throw new NotFoundException("Not found entity with id " + userId);
