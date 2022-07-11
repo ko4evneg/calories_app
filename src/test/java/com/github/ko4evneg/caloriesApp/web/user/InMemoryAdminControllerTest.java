@@ -23,7 +23,7 @@ import static org.junit.Assert.assertTrue;
 
 @ContextConfiguration({"classpath:spring/spring-app.xml", "classpath:db/inmemory-db.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)
-@ActiveProfiles("inMemory")
+@ActiveProfiles(profiles = {"inMemory", "postgre"})
 public class InMemoryAdminControllerTest {
     @Autowired
     private AdminController controller;

@@ -13,7 +13,7 @@ public class SpringMain {
     public static void main(String[] args) throws SQLException {
         try (GenericXmlApplicationContext appCtx = new GenericXmlApplicationContext()) {
             ConfigurableEnvironment env = appCtx.getEnvironment();
-            env.setActiveProfiles("jpa");
+            env.setActiveProfiles("jpa", "hsql");
             appCtx.load("spring/spring-app.xml");
             appCtx.refresh();
 

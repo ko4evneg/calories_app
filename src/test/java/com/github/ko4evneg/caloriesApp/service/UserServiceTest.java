@@ -21,7 +21,7 @@ import static com.github.ko4evneg.caloriesApp.TestingData.*;
 
 @ContextConfiguration("classpath:spring/spring-app.xml")
 @RunWith(SpringRunner.class)
-@ActiveProfiles(profiles = {"jpa"})
+@ActiveProfiles(profiles = {"jpa", "hsql"})
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
 public class UserServiceTest {
 
