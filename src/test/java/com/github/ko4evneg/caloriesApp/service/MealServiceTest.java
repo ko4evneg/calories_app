@@ -3,7 +3,11 @@ package com.github.ko4evneg.caloriesApp.service;
 import com.github.ko4evneg.caloriesApp.model.Meal;
 import com.github.ko4evneg.caloriesApp.util.MealAssertionsHelper;
 import com.github.ko4evneg.caloriesApp.util.exception.NotFoundException;
+import org.junit.AfterClass;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.Stopwatch;
+import org.junit.runner.Description;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ActiveProfiles;
@@ -31,6 +35,26 @@ public class MealServiceTest {
     private MealService mealService;
     @Autowired
     private MealAssertionsHelper assertionsHelper;
+    private static StringBuffer testResults = new StringBuffer();
+    private static long totalMillis = 0;
+
+    @Rule
+    public Stopwatch stopwatch = new Stopwatch() {
+        @Override
+        protected void finished(long nanos, Description description) {
+            totalMillis += nanos / 1_000_000;
+            String currentTestTime = String.format("%-25s: %4d ms." + System.lineSeparator(), description.getMethodName(), nanos / 1_000_000);
+            System.out.println(currentTestTime);
+            testResults.append(currentTestTime);
+        }
+    };
+
+    @AfterClass
+    public static void showStats() {
+        testResults.append("-----------------------------").append(System.lineSeparator());
+        testResults.append(String.format("%-25s: %4d ms.", "Total time", totalMillis));
+        System.out.println(testResults);
+    }
 
     @Test
     public void get() {
